@@ -19,7 +19,7 @@ protocol TodoListPresenterInput: AnyObject {
 }
 
 protocol TodoListPresenterOutput: AnyObject {
-  func updateUI(with tasks: [TaskItem], animated: Bool)
+  func updateUI(with tasks: [TodoTask], animated: Bool)
 }
 
 class TodoListPresenter: TodoListPresenterInput, TodoListInteractorOutput {
@@ -29,7 +29,7 @@ class TodoListPresenter: TodoListPresenterInput, TodoListInteractorOutput {
   var router: TodoListRouterInput?
 
   func viewDidLoad() {
-    interactor?.fetchTasks()
+    interactor?.viewDidLoad()
   }
 
   func didTapTaskAt(_ row: Int) {
@@ -49,7 +49,8 @@ class TodoListPresenter: TodoListPresenterInput, TodoListInteractorOutput {
   }
 
   func didTapNewTask() {
-    router?.navigateToNewTask()
+    interactor?.didTapNewTask()
+    //router?.navigateToNewTask(task)
   }
 
   func didSearchWith(_ searchString: String) {
@@ -61,23 +62,27 @@ class TodoListPresenter: TodoListPresenterInput, TodoListInteractorOutput {
   }
 
 
-  func showTasks(_ tasks: [TaskItem]) {
+  func showTasks(_ tasks: [TodoTask]) {
     view?.updateUI(with: tasks, animated: false)
   }
 
-  func updateTasks(_ tasks: [TaskItem], animated: Bool) {
+  func updateTasks(_ tasks: [TodoTask], animated: Bool) {
     view?.updateUI(with: tasks, animated: animated)
   }
 
-  func editTask(_ task: TaskItem) {
+  func editTask(_ task: TodoTask) {
     router?.navigateToTaskDetail(for: task)
   }
 
-  func share(task: TaskItem) {
+  func share(task: TodoTask) {
     router?.share(task: task)
   }
 
   func showError(_ error: Error) {
     router?.showError(error)
+  }
+
+  func createNewTask(_ task: TodoTask) {
+    router?.navigateToNewTask(task)
   }
 }

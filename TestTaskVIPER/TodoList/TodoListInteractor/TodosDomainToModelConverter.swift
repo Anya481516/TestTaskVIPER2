@@ -7,20 +7,25 @@
 
 import Foundation
 
-struct TodosDomainToModelConverter {
-  func convert(_ domain: Todos?) -> [TaskItem] {
+class TodosDomainToModelConverter {
+
+  lazy var dataManager = CoreDataManager.shared
+
+  func convert(_ domain: Todos?) -> [TodoTask] {
     guard let todos = domain?.todos else { return [] }
 
     return todos.map { convert(domainTodo: $0) }
   }
 
-  func convert(domainTodo: Todos.Todo) -> TaskItem {
-    TaskItem(
-      id: String(domainTodo.id),
-      title: domainTodo.todo,
-      description: domainTodo.todo, // nil
-      isCompleted: domainTodo.isCompleted,
-      date: "10/12/2024" // nil
-    )
+  func convert(domainTodo: Todos.Todo) -> TodoTask {
+    let task = TodoTask(context: dataManager.persistentContainer.viewContext)
+    task.id = String(domainTodo.id)
+    task.title = domainTodo.todo
+    task.taskDescription = domainTodo.todo // nil
+    task.isCompleted = domainTodo.isCompleted
+    task.date = Date()//.getFormattedDate(format: "dd/MM/yyy") // nil
+    //task.datedate = Date()
+
+    return task
   }
 }

@@ -9,60 +9,36 @@ import Foundation
 import UIKit
 
 protocol TodoListRouterInput: AnyObject {
-  func navigateToTaskDetail(for task: TaskItem)
-  func navigateToNewTask()
-  func share(task: TaskItem)
+  func navigateToTaskDetail(for task: TodoTask)
+  func navigateToNewTask(_ task: TodoTask)
+  func share(task: TodoTask)
   func showError(_ error: Error)
 }
 
 class TodoListRouter: TodoListRouterInput {
 
   weak var view: UIViewController?
+  weak var presenter: TodoListInteractorOutput?
 
-  func navigateToTaskDetail(for task: TaskItem) {
+  func navigateToTaskDetail(for task: TodoTask) {
     // TODO: write realization
 
     let taskViewController = TaskAssembly.buildTaskModule(task: task, type: .existing)
     view?.show(taskViewController, sender: nil)
   }
 
-  func navigateToNewTask() {
-    let taskViewController = TaskAssembly.buildTaskModule(type: .new)
+  func navigateToNewTask(_ task: TodoTask) {
+    let taskViewController = TaskAssembly.buildTaskModule(task: task, type: .new)
     view?.show(taskViewController, sender: nil)
   }
 
-  func share(task: TaskItem) {
+  func share(task: TodoTask) {
     let label = task.title
     let description = task.description
-    let date = task.date ?? ""
+    let date = task.date.getFormattedDate(format: "dd/MM/yyy")
 
     let activityViewController : UIActivityViewController = UIActivityViewController(
         activityItems: [label, description, date], applicationActivities: nil)
-
-    // This lines is for the popover you need to show in iPad
-    //activityViewController.popoverPresentationController?.sourceView = (sender as! UIButton)
-
-    // This line remove the arrow of the popover to show in iPad
-//    activityViewController.popoverPresentationController?.permittedArrowDirections = UIPopoverArrowDirection.down
-//    activityViewController.popoverPresentationController?.sourceRect = CGRect(x: 150, y: 150, width: 0, height: 0)
-//
-//    // Pre-configuring activity items
-//    activityViewController.activityItemsConfiguration = [
-//    UIActivity.ActivityType.message
-//    ] as? UIActivityItemsConfigurationReading
-//
-//    // Anything you want to exclude
-//    activityViewController.excludedActivityTypes = [
-//        UIActivity.ActivityType.postToWeibo,
-//        UIActivity.ActivityType.print,
-//        UIActivity.ActivityType.assignToContact,
-//        UIActivity.ActivityType.saveToCameraRoll,
-//        UIActivity.ActivityType.addToReadingList,
-//        UIActivity.ActivityType.postToFlickr,
-//        UIActivity.ActivityType.postToVimeo,
-//        UIActivity.ActivityType.postToTencentWeibo,
-//        UIActivity.ActivityType.postToFacebook
-//    ]
 
     activityViewController.isModalInPresentation = true
     view?.present(activityViewController, animated: true, completion: nil)

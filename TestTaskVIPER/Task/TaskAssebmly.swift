@@ -9,7 +9,7 @@ import UIKit
 
 class TaskAssembly {
   static func buildTaskModule(
-    task: TaskItem = TaskItem(),
+    task: TodoTask,
     type: TaskView.ViewType
   ) -> UIViewController {
     let view = TaskViewController(task: task, type: type)

@@ -88,10 +88,10 @@ class TodoListTableViewCell: UITableViewCell {
     ])
   }
 
-  func configureCell(with task: TaskItem) {
+  func configureCell(with task: TodoTask) {
     titleLabel.text = task.title
-    descriptionLabel.text = task.description
-    dateLabel.text = task.date
+    descriptionLabel.text = task.taskDescription
+    dateLabel.text = task.date.getFormattedDate(format: "dd/MM/yyyy")
 
     if task.isCompleted {
       configureCompletedAppearance()

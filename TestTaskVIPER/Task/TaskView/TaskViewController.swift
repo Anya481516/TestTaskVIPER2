@@ -14,7 +14,7 @@ class TaskViewController: UIViewController, TaskPresenterOutput {
   var presenter: TaskPresenterInput?
 
   init(
-    task: TaskItem,
+    task: TodoTask,
     type: TaskView.ViewType
   ) {
     self.taskView = TaskView(task: task, type: type)

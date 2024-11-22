@@ -8,13 +8,14 @@
 import Foundation
 
 protocol TodoListInteractorInput: AnyObject {
-  func fetchTasks()
+  func viewDidLoad()
   func deleteTaskAt(_ row: Int)
   func changeStatusOfTaskAt(_ row: Int)
   func editTaskAt(_ row: Int)
   func shareTaskAt(_ row: Int)
   func didSearchWith(_ searchString: String)
   func didFinishSearch()
+  func didTapNewTask()
 }
 
 enum CuError: Error {
@@ -22,11 +23,12 @@ enum CuError: Error {
 }
 
 protocol TodoListInteractorOutput: AnyObject {
-  func showTasks(_ tasks: [TaskItem])
-  func updateTasks(_ tasks: [TaskItem], animated: Bool)
-  func editTask(_ task: TaskItem)
-  func share(task: TaskItem)
+  func showTasks(_ tasks: [TodoTask])
+  func updateTasks(_ tasks: [TodoTask], animated: Bool)
+  func editTask(_ task: TodoTask)
+  func share(task: TodoTask)
   func showError(_ error: Error)
+  func createNewTask(_ task: TodoTask)
 }
 
 class TodoListInteractor: TodoListInteractorInput {
@@ -36,24 +38,36 @@ class TodoListInteractor: TodoListInteractorInput {
   private let networkManager: NetwokManager = NetwokManager(with: .default)
   private let converter = TodosDomainToModelConverter()
 
-  private var tasks: [TaskItem] = []
-  private var filteredTasks: [TaskItem] = []
+  private var tasks: [TodoTask] = []
+  private var filteredTasks: [TodoTask] = []
 
-  func fetchTasks() {
-    Task {
-      do {
-        let response = try await networkManager.obtainTasks()
-        tasks = converter.convert(response)
-        presenter?.showTasks(tasks)
-      }
-      catch {
-        presenter?.showError(error)
+  lazy var coreDataManager = CoreDataManager.shared
+
+  func viewDidLoad() {
+    let savedTasks = coreDataManager.obtainData()
+    if !savedTasks.isEmpty {
+      tasks = savedTasks
+      presenter?.showTasks(tasks)
+    }
+    else {
+      Task {
+        do {
+          let response = try await networkManager.obtainTasks()
+          tasks = converter.convert(response)
+          coreDataManager.saveContext()
+          presenter?.showTasks(tasks)
+        }
+        catch {
+          presenter?.showError(error)
+        }
       }
     }
   }
 
   func deleteTaskAt(_ row: Int) {
     // TODO: write realization
+    let task = tasks[row]
+    coreDataManager.delete(task)
     tasks.remove(at: row)
     presenter?.updateTasks(tasks, animated: true)
   }
@@ -73,6 +87,20 @@ class TodoListInteractor: TodoListInteractorInput {
     let task = tasks[row]
     presenter?.share(task: task)
   }
+
+  func didTapNewTask() {
+    let task = TodoTask(context: coreDataManager.persistentContainer.viewContext)
+    task.id = UUID().uuidString
+    task.title = ""
+    task.taskDescription = ""
+    task.isCompleted = false
+    task.date = Date()//.getFormattedDate(format: "mm/DD/yyy")
+
+    presenter?.createNewTask(task)
+    //coreDataManager.saveContext()
+  }
+
+
 
   func didSearchWith(_ searchString: String) {
     guard !searchString.isEmpty else {

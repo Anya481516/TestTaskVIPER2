@@ -28,7 +28,7 @@ class TodoListViewController: UIViewController, TodoListPresenterOutput {
     return searchBar
   }()
 
-  var dataSource: UITableViewDiffableDataSource<TableSection, TaskItem>?
+  var dataSource: UITableViewDiffableDataSource<TableSection, TodoTask>?
 
   override func loadView() {
     super.loadView()
@@ -53,7 +53,7 @@ class TodoListViewController: UIViewController, TodoListPresenterOutput {
 
   }
 
-  func updateUI(with tasks: [TaskItem], animated: Bool) {
+  func updateUI(with tasks: [TodoTask], animated: Bool) {
     updateDataSource(with: tasks, animate: animated)
   }
 
@@ -88,8 +88,8 @@ class TodoListViewController: UIViewController, TodoListPresenterOutput {
     })
   }
 
-  func updateDataSource(with tasks: [TaskItem], animate: Bool) {
-    var snapshot = NSDiffableDataSourceSnapshot<TableSection, TaskItem>()
+  func updateDataSource(with tasks: [TodoTask], animate: Bool) {
+    var snapshot = NSDiffableDataSourceSnapshot<TableSection, TodoTask>()
     snapshot.appendSections([.main])
     snapshot.appendItems(tasks)
     dataSource?.apply(snapshot, animatingDifferences: animate)

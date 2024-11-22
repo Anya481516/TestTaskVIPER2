@@ -14,7 +14,7 @@ class TaskView: UIView {
     case existing
   }
 
-  private lazy var titleTextView: UITextView = {
+  lazy var titleTextView: UITextView = {
     let text = UITextView()
     text.translatesAutoresizingMaskIntoConstraints = false
     text.font = UIFont.boldSystemFont(ofSize: 34)
@@ -31,7 +31,7 @@ class TaskView: UIView {
     return label
   }()
 
-  private lazy var descriptionTextField: UITextView = {
+  lazy var descriptionTextField: UITextView = {
     let text = UITextView()
     text.translatesAutoresizingMaskIntoConstraints = false
     text.font = UIFont.systemFont(ofSize: 16)
@@ -40,10 +40,10 @@ class TaskView: UIView {
     return text
   }()
 
-  private var task: TaskItem
+  private var task: TodoTask
 
   init(
-    task: TaskItem,
+    task: TodoTask,
     type: ViewType
   ) {
 
@@ -53,12 +53,6 @@ class TaskView: UIView {
     if type == .new { titleTextView.becomeFirstResponder() }
   }
 
-//  override init(frame: CGRect) {
-//    super.init(frame: frame)
-//    setupUI()
-//    titleTextView.becomeFirstResponder()
-//  }
-
   required init?(coder: NSCoder) {
     fatalError("init(coder:) has not been implemented")
   }
@@ -67,9 +61,9 @@ class TaskView: UIView {
     addSubview(titleTextView)
     titleTextView.text = task.title
     addSubview(dateLabel)
-    dateLabel.text = task.date
+    dateLabel.text = task.date.getFormattedDate(format: "dd/MM/yyy")
     addSubview(descriptionTextField)
-    descriptionTextField.text = task.description
+    descriptionTextField.text = task.taskDescription
     setupLayout()
   }
 

@@ -8,7 +8,7 @@
 import Foundation
 
 protocol TaskPresenterInput: AnyObject {
-  func didLeaveScreen(task: TaskItem)
+  func didLeaveScreen(task: TodoTask)
 }
 
 protocol TaskPresenterOutput: AnyObject {
@@ -21,7 +21,7 @@ class TaskPresenter: TaskPresenterInput, TaskInteractorOutput {
   var interactor: TaskInteractorInput?
   //var router: TaskRouterInput?
 
-  func didLeaveScreen(task: TaskItem) {
+  func didLeaveScreen(task: TodoTask) {
     //interactor.
   }
 }

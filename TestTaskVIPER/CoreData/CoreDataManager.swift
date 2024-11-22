@@ -39,4 +39,23 @@ class CoreDataManager {
           }
       }
   }
+
+  func obtainData() -> [TodoTask] {
+    let taskFetchRequest = TodoTask.fetchRequest()
+    let dateSortDescriptor = NSSortDescriptor(key: "date", ascending: true)
+    let idSortDescriptor = NSSortDescriptor(key: "id", ascending: true)
+    taskFetchRequest.sortDescriptors = [dateSortDescriptor, idSortDescriptor]
+
+    let context = persistentContainer.viewContext
+    let result = try? context.fetch(taskFetchRequest)
+
+    return result ?? []
+  }
+
+  func delete(_ task: TodoTask) {
+    let context = persistentContainer.viewContext
+
+    context.delete(task)
+    saveContext()
+  }
 }
