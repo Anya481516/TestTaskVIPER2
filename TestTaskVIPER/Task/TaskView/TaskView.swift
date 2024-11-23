@@ -31,7 +31,7 @@ class TaskView: UIView {
     return label
   }()
 
-  lazy var descriptionTextField: UITextView = {
+  lazy var descriptionTextView: UITextView = {
     let text = UITextView()
     text.translatesAutoresizingMaskIntoConstraints = false
     text.font = UIFont.systemFont(ofSize: 16)
@@ -62,8 +62,8 @@ class TaskView: UIView {
     titleTextView.text = task.title
     addSubview(dateLabel)
     dateLabel.text = task.date.getFormattedDate(format: "dd/MM/yyy")
-    addSubview(descriptionTextField)
-    descriptionTextField.text = task.taskDescription
+    addSubview(descriptionTextView)
+    descriptionTextView.text = task.taskDescription
     setupLayout()
   }
 
@@ -78,10 +78,10 @@ class TaskView: UIView {
       dateLabel.leadingAnchor.constraint(equalTo: leadingAnchor, constant: 16),
       dateLabel.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -16),
 
-      descriptionTextField.topAnchor.constraint(equalTo: dateLabel.bottomAnchor, constant: 16),
-      descriptionTextField.leadingAnchor.constraint(equalTo: leadingAnchor, constant: 16),
-      descriptionTextField.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -16),
-      descriptionTextField.heightAnchor.constraint(greaterThanOrEqualToConstant: 24),
+      descriptionTextView.topAnchor.constraint(equalTo: dateLabel.bottomAnchor, constant: 16),
+      descriptionTextView.leadingAnchor.constraint(equalTo: leadingAnchor, constant: 16),
+      descriptionTextView.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -16),
+      descriptionTextView.heightAnchor.constraint(greaterThanOrEqualToConstant: 24),
     ])
   }
 }

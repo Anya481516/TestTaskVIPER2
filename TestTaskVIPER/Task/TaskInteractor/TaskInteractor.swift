@@ -8,7 +8,7 @@
 import Foundation
 
 protocol TaskInteractorInput: AnyObject {
-  func save(task: TodoTask)
+  func viewWIllDisappear(with task: TodoTask)
 }
 
 protocol TaskInteractorOutput: AnyObject {
@@ -16,12 +16,19 @@ protocol TaskInteractorOutput: AnyObject {
 }
 
 class TaskInteractor: TaskInteractorInput {
+  func save() {
+    
+  }
+  
 
   weak var presenter: TaskInteractorOutput?
-  lazy var dataManager = CoreDataManager.shared
+  lazy var coreDataManager = CoreDataManager.shared
 
-  func save(task: TodoTask) {
-    // TODO: saving
-    //presemter.
+  func viewWIllDisappear(with task: TodoTask) {
+    guard !task.title.isEmpty || !task.taskDescription.isEmpty else {
+      coreDataManager.delete(task)
+      return
+    }
+    coreDataManager.saveContext()
   }
 }

@@ -9,6 +9,7 @@ import Foundation
 
 protocol TodoListInteractorInput: AnyObject {
   func viewDidLoad()
+  func viewWillAppear()
   func deleteTaskAt(_ row: Int)
   func changeStatusOfTaskAt(_ row: Int)
   func editTaskAt(_ row: Int)
@@ -64,8 +65,13 @@ class TodoListInteractor: TodoListInteractorInput {
     }
   }
 
+  func viewWillAppear() {
+    let savedTasks = coreDataManager.obtainData()
+    tasks = savedTasks
+    presenter?.showTasks(tasks)
+  }
+
   func deleteTaskAt(_ row: Int) {
-    // TODO: write realization
     let task = tasks[row]
     coreDataManager.delete(task)
     tasks.remove(at: row)
@@ -73,8 +79,8 @@ class TodoListInteractor: TodoListInteractorInput {
   }
 
   func changeStatusOfTaskAt(_ row: Int) {
-    // TODO: write realization
     tasks[row].isCompleted.toggle()
+    coreDataManager.saveContext()
     presenter?.updateTasks(tasks, animated: false)
   }
 
@@ -94,13 +100,10 @@ class TodoListInteractor: TodoListInteractorInput {
     task.title = ""
     task.taskDescription = ""
     task.isCompleted = false
-    task.date = Date()//.getFormattedDate(format: "mm/DD/yyy")
+    task.date = Date()
 
     presenter?.createNewTask(task)
-    //coreDataManager.saveContext()
   }
-
-
 
   func didSearchWith(_ searchString: String) {
     guard !searchString.isEmpty else {

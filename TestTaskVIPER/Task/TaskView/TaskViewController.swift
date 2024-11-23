@@ -11,12 +11,24 @@ class TaskViewController: UIViewController, TaskPresenterOutput {
 
   private var taskView: TaskView
 
+  private lazy var titleTextView: UITextView = {
+    var textView = taskView.titleTextView
+    return textView
+  }()
+
+  private lazy var descriptionTextView: UITextView = {
+    var textView = taskView.descriptionTextView
+    return textView
+  }()
+
   var presenter: TaskPresenterInput?
+  var task: TodoTask
 
   init(
     task: TodoTask,
     type: TaskView.ViewType
   ) {
+    self.task = task
     self.taskView = TaskView(task: task, type: type)
     super.init(nibName: nil, bundle: nil)
   }
@@ -33,12 +45,25 @@ class TaskViewController: UIViewController, TaskPresenterOutput {
   override func viewDidLoad() {
     super.viewDidLoad()
 
+    titleTextView.delegate = self
+    descriptionTextView.delegate = self
     self.navigationController?.isToolbarHidden = true
     self.navigationController?.navigationBar.tintColor = ColorScheme.cutsomYellow
   }
 
   override func viewWillDisappear(_ animated: Bool) {
     super.viewWillDisappear(animated)
-    // TODO: save data
+
+    presenter?.viewWIllDisappear(with: task)
+  }
+}
+
+extension TaskViewController: UITextViewDelegate {
+  func textViewDidChange(_ textView: UITextView) {
+    if textView == self.titleTextView {
+      task.title = textView.text
+    } else if textView == self.descriptionTextView {
+      task.taskDescription = textView.text
+    }
   }
 }

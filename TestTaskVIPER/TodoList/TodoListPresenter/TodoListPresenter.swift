@@ -9,6 +9,7 @@ import Foundation
 
 protocol TodoListPresenterInput: AnyObject {
   func viewDidLoad()
+  func viewWillAppear()
   func didTapEditTaskAt(_ row: Int)
   func didTapShareTaskAt(_ row: Int)
   func didTapDeleteTaskAt(_ row: Int)
@@ -30,6 +31,10 @@ class TodoListPresenter: TodoListPresenterInput, TodoListInteractorOutput {
 
   func viewDidLoad() {
     interactor?.viewDidLoad()
+  }
+
+  func viewWillAppear() {
+    interactor?.viewWillAppear()
   }
 
   func didTapTaskAt(_ row: Int) {
