@@ -17,6 +17,7 @@ protocol TodoListInteractorInput: AnyObject {
   func didSearchWith(_ searchString: String)
   func didFinishSearch()
   func didTapNewTask()
+  func getToolBarLabelText(for taskCount: Int) -> String?
 }
 
 enum CuError: Error {
@@ -120,19 +121,18 @@ class TodoListInteractor: TodoListInteractorInput {
     presenter?.updateTasks(tasks, animated: false)
   }
 
-//  func getToolBarLabelText() -> String? {
-//    let count = tasks.count
-//    let lastNumber = count % 10
-//    switch lastNumber {
-//    case 0, 5...9:
-//      return "\(count) Задач"
-//    case 1:
-//      return "\(count) Задача"
-//    case 2...4:
-//      return "\(count) Задачи"
-//    default:
-//      return nil
-//    }
-//  }
+  func getToolBarLabelText(for taskCount: Int) -> String? {
+    let lastNumber = taskCount % 10
+    switch lastNumber {
+    case 0, 5...9:
+      return "\(taskCount) Задач"
+    case 1:
+      return "\(taskCount) Задача"
+    case 2...4:
+      return "\(taskCount) Задачи"
+    default:
+      return nil
+    }
+  }
 }
 

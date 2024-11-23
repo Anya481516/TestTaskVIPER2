@@ -17,6 +17,7 @@ protocol TodoListPresenterInput: AnyObject {
   func didTapNewTask()
   func didSearchWith(_ searchString: String)
   func didFinishSearch()
+  func getToolBarLabelText(for taskCount: Int) -> String?
 }
 
 protocol TodoListPresenterOutput: AnyObject {
@@ -55,7 +56,6 @@ class TodoListPresenter: TodoListPresenterInput, TodoListInteractorOutput {
 
   func didTapNewTask() {
     interactor?.didTapNewTask()
-    //router?.navigateToNewTask(task)
   }
 
   func didSearchWith(_ searchString: String) {
@@ -64,6 +64,10 @@ class TodoListPresenter: TodoListPresenterInput, TodoListInteractorOutput {
 
   func didFinishSearch() {
     interactor?.didFinishSearch()
+  }
+
+  func getToolBarLabelText(for taskCount: Int) -> String? {
+    interactor?.getToolBarLabelText(for: taskCount)
   }
 
 

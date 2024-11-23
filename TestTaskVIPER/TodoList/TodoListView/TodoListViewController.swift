@@ -28,6 +28,13 @@ class TodoListViewController: UIViewController, TodoListPresenterOutput {
     return searchBar
   }()
 
+  private lazy var toolBarTitleLabel: UILabel = {
+    let label = UILabel()
+    label.font = UIFont.boldSystemFont(ofSize: 11)
+    label.textAlignment = NSTextAlignment.center
+    return label
+  }()
+
   var dataSource: UITableViewDiffableDataSource<TableSection, TodoTask>?
 
   override func loadView() {
@@ -61,11 +68,7 @@ class TodoListViewController: UIViewController, TodoListPresenterOutput {
   func setupToolBar() {
     var items = [UIBarButtonItem]()
 
-    let label = UILabel()
-    label.text = "7 Задач"
-    label.font = UIFont.boldSystemFont(ofSize: 11)
-    label.textAlignment = NSTextAlignment.center
-    let barLabel = UIBarButtonItem(customView: label)
+    let barLabel = UIBarButtonItem(customView: toolBarTitleLabel)
 
     let rightButton = UIBarButtonItem(barButtonSystemItem: .compose, target: self, action: #selector(add))
 
@@ -94,6 +97,7 @@ class TodoListViewController: UIViewController, TodoListPresenterOutput {
     snapshot.appendSections([.main])
     snapshot.appendItems(tasks)
     dataSource?.apply(snapshot, animatingDifferences: animate)
+    toolBarTitleLabel.text = presenter?.getToolBarLabelText(for: tasks.count)
   }
 
   @objc func add(_ sender: UIBarButtonItem) {
