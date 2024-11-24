@@ -27,8 +27,7 @@ enum CuError: Error {
 }
 
 protocol TodoListInteractorOutput: AnyObject {
-  func showTasks(_ tasks: [TodoTask])
-  func updateTasks(_ tasks: [TodoTask], animated: Bool)
+  func showTasks()
   func editTask(_ task: TodoTask)
   func share(task: TodoTask)
   func showError(_ error: Error)
@@ -47,19 +46,23 @@ class TodoListInteractor: TodoListInteractorInput {
 
   lazy var coreDataManager = CoreDataManager.shared
 
+  var isSearching = false
+
   func viewDidLoad() {
     let savedTasks = coreDataManager.obtainData()
     if !savedTasks.isEmpty {
       tasks = savedTasks
-      presenter?.showTasks(tasks)
+      filteredTasks = tasks
+      presenter?.showTasks()
     }
     else {
       Task {
         do {
           let response = try await networkManager.obtainTasks()
           tasks = converter.convert(response)
+          filteredTasks = tasks
           coreDataManager.saveContext()
-          presenter?.showTasks(tasks)
+          presenter.showTasks()
         }
         catch {
           presenter.showError(error)
@@ -71,30 +74,33 @@ class TodoListInteractor: TodoListInteractorInput {
   func viewWillAppear() {
     let savedTasks = coreDataManager.obtainData()
     tasks = savedTasks
-    presenter.showTasks(tasks)
+    if !isSearching {
+      filteredTasks = tasks
+    }
+    presenter.showTasks()
   }
 
   func deleteTaskAt(_ row: Int) {
     coreDataManager.delete(tasks.remove(at: row))
-    presenter.updateTasks(tasks, animated: true)
+    presenter.showTasks()
   }
 
   func changeStatusOfTaskAt(_ row: Int) {
     guard row < tasks.count else { return }
-    tasks[row].isCompleted.toggle()
+    filteredTasks[row].isCompleted.toggle()
     coreDataManager.saveContext()
-    presenter.updateTasks(tasks, animated: false)
+    presenter.showTasks()
   }
 
   func editTaskAt(_ row: Int) {
-    guard row < tasks.count else { return }
-    let task = tasks[row]
+    guard row < filteredTasks.count else { return }
+    let task = filteredTasks[row]
     presenter.editTask(task)
   }
 
   func shareTaskAt(_ row: Int) {
     guard row < tasks.count else { return }
-    let task = tasks[row]
+    let task = filteredTasks[row]
     presenter.share(task: task)
   }
 
@@ -111,17 +117,20 @@ class TodoListInteractor: TodoListInteractorInput {
 
   func didSearchWith(_ searchString: String) {
     guard !searchString.isEmpty else {
-      presenter.updateTasks(tasks, animated: false)
+      isSearching = false
+      filteredTasks = tasks
+      presenter.showTasks()
       return
     }
-    
+    isSearching = true
     filteredTasks = tasks.filter({$0.title.lowercased().contains(searchString.lowercased()) || $0.description.lowercased().contains(searchString.lowercased())})
-    presenter.updateTasks(filteredTasks, animated: false)
+    presenter.showTasks()
   }
 
   func didFinishSearch() {
-    filteredTasks = []
-    presenter.updateTasks(tasks, animated: false)
+    isSearching = false
+    filteredTasks = tasks
+    presenter.showTasks()
   }
 
   func getToolBarLabelText(for taskCount: Int) -> String? {
@@ -139,11 +148,11 @@ class TodoListInteractor: TodoListInteractorInput {
   }
 
   func getTask(_ row: Int) -> TodoTask {
-    return tasks[row]
+    return filteredTasks[row]
   }
 
   func getTasksCount() -> Int {
-    return tasks.count
+    return filteredTasks.count
   }
 }
 

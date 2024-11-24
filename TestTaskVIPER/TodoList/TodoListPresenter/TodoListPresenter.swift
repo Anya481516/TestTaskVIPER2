@@ -17,13 +17,13 @@ protocol TodoListPresenterInput: AnyObject {
   func didTapNewTask()
   func didSearchWith(_ searchString: String)
   func didFinishSearch()
-  func getToolBarLabelText(for taskCount: Int) -> String?
+  func getToolBarLabelText() -> String?
   func getTask(_ row: Int) -> TodoTask
   func getTasksCount() -> Int
 }
 
 protocol TodoListPresenterOutput: AnyObject {
-  func updateUI(with tasks: [TodoTask], animated: Bool)
+  func updateUI()
 }
 
 class TodoListPresenter: TodoListPresenterInput, TodoListInteractorOutput {
@@ -67,8 +67,8 @@ class TodoListPresenter: TodoListPresenterInput, TodoListInteractorOutput {
     interactor.didFinishSearch()
   }
 
-  func getToolBarLabelText(for taskCount: Int) -> String? {
-    interactor.getToolBarLabelText(for: taskCount)
+  func getToolBarLabelText() -> String? {
+    interactor.getToolBarLabelText(for: interactor.getTasksCount())
   }
 
   func getTask(_ row: Int) -> TodoTask {
@@ -80,12 +80,8 @@ class TodoListPresenter: TodoListPresenterInput, TodoListInteractorOutput {
   }
 
 
-  func showTasks(_ tasks: [TodoTask]) {
-    view.updateUI(with: tasks, animated: false)
-  }
-
-  func updateTasks(_ tasks: [TodoTask], animated: Bool) {
-    view.updateUI(with: tasks, animated: animated)
+  func showTasks() {
+    view.updateUI()
   }
 
   func editTask(_ task: TodoTask) {

@@ -36,8 +36,6 @@ class TodoListViewController: UIViewController, TodoListPresenterOutput {
     return label
   }()
 
-  var dataSource: UITableViewDiffableDataSource<TableSection, TodoTask>?
-
   override func loadView() {
     super.loadView()
     view = todoListView
@@ -62,8 +60,9 @@ class TodoListViewController: UIViewController, TodoListPresenterOutput {
 
   }
 
-  func updateUI(with tasks: [TodoTask], animated: Bool) {
-    updateDataSource(with: tasks, animate: animated)
+  func updateUI() {
+    tableView.reloadData()
+    toolBarTitleLabel.text = presenter.getToolBarLabelText()
   }
 
   func setupToolBar() {
@@ -88,20 +87,6 @@ class TodoListViewController: UIViewController, TodoListPresenterOutput {
   func setupDataSource() {
     tableView.register(TodoListTableViewCell.self, forCellReuseIdentifier: TodoListTableViewCell.reuseIdentifier)
     tableView.dataSource = self
-//    dataSource = UITableViewDiffableDataSource(tableView: tableView, cellProvider: { tableView, indexPath, task in
-//      let cell = tableView.dequeueReusableCell(withIdentifier: TodoListTableViewCell.reuseIdentifier, for: indexPath) as! TodoListTableViewCell
-//      cell.configureCell(with: task)
-//      return cell
-//    })
-  }
-
-  func updateDataSource(with tasks: [TodoTask], animate: Bool) {
-//    var snapshot = NSDiffableDataSourceSnapshot<TableSection, TodoTask>()
-//    snapshot.appendSections([.main])
-//    snapshot.appendItems(tasks)
-//    dataSource?.apply(snapshot, animatingDifferences: animate)
-    tableView.reloadData()
-    toolBarTitleLabel.text = presenter.getToolBarLabelText(for: tasks.count)
   }
 
   @objc func add(_ sender: UIBarButtonItem) {
@@ -109,6 +94,8 @@ class TodoListViewController: UIViewController, TodoListPresenterOutput {
   }
 
 }
+
+// MARK: - UITableViewDataSource
 
 extension TodoListViewController: UITableViewDataSource {
   func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
@@ -119,17 +106,20 @@ extension TodoListViewController: UITableViewDataSource {
     let cell = tableView.dequeueReusableCell(withIdentifier: TodoListTableViewCell.reuseIdentifier, for: indexPath) as! TodoListTableViewCell
     let task = presenter.getTask(indexPath.row)
     cell.configureCell(with: task)
+    cell.selectionStyle = .none
     return cell
   }
 }
 
+// MARK: - UITableViewDelegate
+
 extension TodoListViewController: UITableViewDelegate {
+
   func tableView(
       _ tableView: UITableView,
       didSelectRowAt indexPath: IndexPath
   ) {
     let row = indexPath.row
-    tableView.deselectRow(at: indexPath, animated: false)
     presenter.didTapTaskAt(row)
   }
 
@@ -157,7 +147,8 @@ extension TodoListViewController: UITableViewDelegate {
 
     let task = presenter.getTask(indexPath.row)
     let previewProvider = TodoPreviewViewController(task: task)
-    //previewProvider!.preferredContentSize = CGSize(width: previewProvider!.view.frame.width, height: previewProvider!.view.frame.height)
+    previewProvider.loadViewIfNeeded()
+    previewProvider.preferredContentSize = previewProvider.getContentSize()
 
 //    let previewParams = UIPreviewParameters()
 //    previewParams.backgroundColor = .clear
@@ -196,6 +187,8 @@ extension TodoListViewController: UITableViewDelegate {
 //  }
 }
 
+// MARK: - UISearchBarDelegate
+
 extension TodoListViewController: UISearchBarDelegate {
 
    func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {
@@ -204,6 +197,7 @@ extension TodoListViewController: UISearchBarDelegate {
 
    func searchBarCancelButtonClicked(_ searchBar: UISearchBar) {
      searchBar.text = ""
+     searchBar.resignFirstResponder()
      presenter.didFinishSearch()
    }
  }

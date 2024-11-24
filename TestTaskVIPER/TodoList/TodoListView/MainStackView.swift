@@ -71,5 +71,9 @@ class MainStackView: UIStackView {
   func prepareForReuse() {
     titleLabel.attributedText = nil
   }
+
+  func getContentHeight() -> CGFloat {
+    return titleLabel.bounds.height + descriptionLabel.bounds.height + dateLabel.bounds.height + 12
+  }
 }
 

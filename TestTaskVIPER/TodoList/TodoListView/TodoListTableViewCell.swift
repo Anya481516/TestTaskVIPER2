@@ -49,7 +49,7 @@ class TodoListTableViewCell: UITableViewCell {
 
       mainStackView.topAnchor.constraint(equalTo: contentView.topAnchor, constant: 18),
       mainStackView.leadingAnchor.constraint(equalTo: statusImageView.trailingAnchor, constant: 4),
-      mainStackView.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -8),
+      mainStackView.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -16),
       mainStackView.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: -16),
     ])
   }

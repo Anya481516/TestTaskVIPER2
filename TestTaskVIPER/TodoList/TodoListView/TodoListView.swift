@@ -20,8 +20,8 @@ class TodoListView: UIView {
 
   lazy var searchBar: UISearchBar = {
     var bar = UISearchBar()
-    bar.translatesAutoresizingMaskIntoConstraints = false
     bar.placeholder = "Search"
+    bar.sizeToFit()
     return bar
   }()
 
@@ -30,6 +30,7 @@ class TodoListView: UIView {
     table.translatesAutoresizingMaskIntoConstraints = false
     table.register(TodoListTableViewCell.self, forCellReuseIdentifier: TodoListTableViewCell.reuseIdentifier)
     table.estimatedRowHeight = 120
+    table.separatorInset = UIEdgeInsets(top: 0, left: 16, bottom: 0, right: 16)
     return table
   }()
 
@@ -50,24 +51,20 @@ class TodoListView: UIView {
   }
 
   private func setupSearchBar() {
-    addSubview(searchBar)
+    tableView.tableHeaderView = searchBar
   }
 
   private func setupTableView() {
     addSubview(tableView)
   }
 
-  func setupLayout() {
+  private func setupLayout() {
     NSLayoutConstraint.activate([
       titleLabel.topAnchor.constraint(equalTo: safeAreaLayoutGuide.topAnchor),
       titleLabel.leadingAnchor.constraint(equalTo: leadingAnchor, constant: 16),
       titleLabel.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -16),
 
-      searchBar.topAnchor.constraint(equalTo: titleLabel.bottomAnchor),
-      searchBar.leadingAnchor.constraint(equalTo: leadingAnchor, constant: 8),
-      searchBar.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -8),
-
-      tableView.topAnchor.constraint(equalTo: searchBar.bottomAnchor),
+      tableView.topAnchor.constraint(equalTo: titleLabel.bottomAnchor),
       tableView.leadingAnchor.constraint(equalTo: leadingAnchor),
       tableView.bottomAnchor.constraint(equalTo: safeAreaLayoutGuide.bottomAnchor),
       tableView.trailingAnchor.constraint(equalTo: trailingAnchor),
