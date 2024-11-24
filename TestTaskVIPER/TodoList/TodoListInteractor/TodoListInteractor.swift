@@ -18,7 +18,8 @@ protocol TodoListInteractorInput: AnyObject {
   func didFinishSearch()
   func didTapNewTask()
   func getToolBarLabelText(for taskCount: Int) -> String?
-  func getTask(_ row: Int) -> TodoTask?
+  func getTask(_ row: Int) -> TodoTask
+  func getTasksCount() -> Int
 }
 
 enum CuError: Error {
@@ -137,9 +138,12 @@ class TodoListInteractor: TodoListInteractorInput {
     }
   }
 
-  func getTask(_ row: Int) -> TodoTask? {
-    guard row < tasks.count else { return nil }
+  func getTask(_ row: Int) -> TodoTask {
     return tasks[row]
+  }
+
+  func getTasksCount() -> Int {
+    return tasks.count
   }
 }
 

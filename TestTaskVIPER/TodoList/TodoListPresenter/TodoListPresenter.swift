@@ -18,7 +18,8 @@ protocol TodoListPresenterInput: AnyObject {
   func didSearchWith(_ searchString: String)
   func didFinishSearch()
   func getToolBarLabelText(for taskCount: Int) -> String?
-  func getTask(_ row: Int) -> TodoTask?
+  func getTask(_ row: Int) -> TodoTask
+  func getTasksCount() -> Int
 }
 
 protocol TodoListPresenterOutput: AnyObject {
@@ -26,7 +27,6 @@ protocol TodoListPresenterOutput: AnyObject {
 }
 
 class TodoListPresenter: TodoListPresenterInput, TodoListInteractorOutput {
-
   weak var view: TodoListPresenterOutput?
   var interactor: TodoListInteractorInput?
   var router: TodoListRouterInput?
@@ -71,8 +71,12 @@ class TodoListPresenter: TodoListPresenterInput, TodoListInteractorOutput {
     interactor?.getToolBarLabelText(for: taskCount)
   }
 
-  func getTask(_ row: Int) -> TodoTask? {
-    interactor?.getTask(row)
+  func getTask(_ row: Int) -> TodoTask {
+    interactor!.getTask(row)
+  }
+
+  func getTasksCount() -> Int {
+    interactor!.getTasksCount()
   }
 
 

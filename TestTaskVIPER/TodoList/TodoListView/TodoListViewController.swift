@@ -86,25 +86,41 @@ class TodoListViewController: UIViewController, TodoListPresenterOutput {
   }
 
   func setupDataSource() {
-    dataSource = UITableViewDiffableDataSource(tableView: tableView, cellProvider: { tableView, indexPath, task in
-      let cell = tableView.dequeueReusableCell(withIdentifier: TodoListTableViewCell.reuseIdentifier, for: indexPath) as! TodoListTableViewCell
-      cell.configureCell(with: task)
-      return cell
-    })
+    tableView.register(TodoListTableViewCell.self, forCellReuseIdentifier: TodoListTableViewCell.reuseIdentifier)
+    tableView.dataSource = self
+//    dataSource = UITableViewDiffableDataSource(tableView: tableView, cellProvider: { tableView, indexPath, task in
+//      let cell = tableView.dequeueReusableCell(withIdentifier: TodoListTableViewCell.reuseIdentifier, for: indexPath) as! TodoListTableViewCell
+//      cell.configureCell(with: task)
+//      return cell
+//    })
   }
 
   func updateDataSource(with tasks: [TodoTask], animate: Bool) {
-    var snapshot = NSDiffableDataSourceSnapshot<TableSection, TodoTask>()
-    snapshot.appendSections([.main])
-    snapshot.appendItems(tasks)
-    dataSource?.apply(snapshot, animatingDifferences: animate)
-    toolBarTitleLabel.text = presenter?.getToolBarLabelText(for: tasks.count)
+//    var snapshot = NSDiffableDataSourceSnapshot<TableSection, TodoTask>()
+//    snapshot.appendSections([.main])
+//    snapshot.appendItems(tasks)
+//    dataSource?.apply(snapshot, animatingDifferences: animate)
+//    toolBarTitleLabel.text = presenter?.getToolBarLabelText(for: tasks.count)
+    tableView.reloadData()
   }
 
   @objc func add(_ sender: UIBarButtonItem) {
     presenter?.didTapNewTask()
   }
 
+}
+
+extension TodoListViewController: UITableViewDataSource {
+  func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+    return presenter!.getTasksCount()
+  }
+
+  func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+    let cell = tableView.dequeueReusableCell(withIdentifier: TodoListTableViewCell.reuseIdentifier, for: indexPath) as! TodoListTableViewCell
+    let task = presenter!.getTask(indexPath.row)
+    cell.configureCell(with: task)
+    return cell
+  }
 }
 
 extension TodoListViewController: UITableViewDelegate {
