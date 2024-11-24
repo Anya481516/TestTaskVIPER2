@@ -54,7 +54,7 @@ class MainStackView: UIStackView {
     titleText = task.title
     titleLabel.text = titleText
     descriptionLabel.text = task.taskDescription
-    dateLabel.text = task.date.getFormattedDate(format: "dd/MM/yyy")
+    dateLabel.text = task.date.getFormattedDate(format: "dd/MM/yyyy")
   }
 
   func changeStatusToCompleted() {
@@ -66,7 +66,10 @@ class MainStackView: UIStackView {
   func changeStatusToUncompleted() {
     titleLabel.textColor = .white
     descriptionLabel.textColor = .white
-    titleLabel.strikeThrough(false)
+  }
+
+  func prepareForReuse() {
+    titleLabel.attributedText = nil
   }
 }
 

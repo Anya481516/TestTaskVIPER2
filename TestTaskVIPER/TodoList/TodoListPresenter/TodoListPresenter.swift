@@ -27,80 +27,80 @@ protocol TodoListPresenterOutput: AnyObject {
 }
 
 class TodoListPresenter: TodoListPresenterInput, TodoListInteractorOutput {
-  weak var view: TodoListPresenterOutput?
-  var interactor: TodoListInteractorInput?
-  var router: TodoListRouterInput?
+  weak var view: TodoListPresenterOutput!
+  var interactor: TodoListInteractorInput!
+  var router: TodoListRouterInput!
 
   func viewDidLoad() {
-    interactor?.viewDidLoad()
+    interactor.viewDidLoad()
   }
 
   func viewWillAppear() {
-    interactor?.viewWillAppear()
+    interactor.viewWillAppear()
   }
 
   func didTapTaskAt(_ row: Int) {
-    interactor?.changeStatusOfTaskAt(row)
+    interactor.changeStatusOfTaskAt(row)
   }
 
   func didTapEditTaskAt(_ row: Int) {
-    interactor?.editTaskAt(row)
+    interactor.editTaskAt(row)
   }
 
   func didTapShareTaskAt(_ row: Int) {
-    interactor?.shareTaskAt(row)
+    interactor.shareTaskAt(row)
   }
 
   func didTapDeleteTaskAt(_ row: Int) {
-    interactor?.deleteTaskAt(row)
+    interactor.deleteTaskAt(row)
   }
 
   func didTapNewTask() {
-    interactor?.didTapNewTask()
+    interactor.didTapNewTask()
   }
 
   func didSearchWith(_ searchString: String) {
-    interactor?.didSearchWith(searchString)
+    interactor.didSearchWith(searchString)
   }
 
   func didFinishSearch() {
-    interactor?.didFinishSearch()
+    interactor.didFinishSearch()
   }
 
   func getToolBarLabelText(for taskCount: Int) -> String? {
-    interactor?.getToolBarLabelText(for: taskCount)
+    interactor.getToolBarLabelText(for: taskCount)
   }
 
   func getTask(_ row: Int) -> TodoTask {
-    interactor!.getTask(row)
+    interactor.getTask(row)
   }
 
   func getTasksCount() -> Int {
-    interactor!.getTasksCount()
+    interactor.getTasksCount()
   }
 
 
   func showTasks(_ tasks: [TodoTask]) {
-    view?.updateUI(with: tasks, animated: false)
+    view.updateUI(with: tasks, animated: false)
   }
 
   func updateTasks(_ tasks: [TodoTask], animated: Bool) {
-    view?.updateUI(with: tasks, animated: animated)
+    view.updateUI(with: tasks, animated: animated)
   }
 
   func editTask(_ task: TodoTask) {
-    router?.navigateToTaskDetail(for: task)
+    router.navigateToTaskDetail(for: task)
   }
 
   func share(task: TodoTask) {
-    router?.share(task: task)
+    router.share(task: task)
   }
 
   func showError(_ error: Error) {
-    router?.showError(error)
+    router.showError(error)
   }
 
   func createNewTask(_ task: TodoTask) {
-    router?.navigateToNewTask(task)
+    router.navigateToNewTask(task)
   }
 }

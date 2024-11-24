@@ -37,7 +37,7 @@ protocol TodoListInteractorOutput: AnyObject {
 
 class TodoListInteractor: TodoListInteractorInput {
 
-  weak var presenter: TodoListInteractorOutput?
+  weak var presenter: TodoListInteractorOutput!
 
   private let networkManager: NetwokManager = NetwokManager(with: .default)
   private let converter = TodosDomainToModelConverter()
@@ -62,7 +62,7 @@ class TodoListInteractor: TodoListInteractorInput {
           presenter?.showTasks(tasks)
         }
         catch {
-          presenter?.showError(error)
+          presenter.showError(error)
         }
       }
     }
@@ -71,31 +71,31 @@ class TodoListInteractor: TodoListInteractorInput {
   func viewWillAppear() {
     let savedTasks = coreDataManager.obtainData()
     tasks = savedTasks
-    presenter?.showTasks(tasks)
+    presenter.showTasks(tasks)
   }
 
   func deleteTaskAt(_ row: Int) {
     coreDataManager.delete(tasks.remove(at: row))
-    presenter?.updateTasks(tasks, animated: true)
+    presenter.updateTasks(tasks, animated: true)
   }
 
   func changeStatusOfTaskAt(_ row: Int) {
     guard row < tasks.count else { return }
     tasks[row].isCompleted.toggle()
     coreDataManager.saveContext()
-    presenter?.updateTasks(tasks, animated: false)
+    presenter.updateTasks(tasks, animated: false)
   }
 
   func editTaskAt(_ row: Int) {
     guard row < tasks.count else { return }
     let task = tasks[row]
-    presenter?.editTask(task)
+    presenter.editTask(task)
   }
 
   func shareTaskAt(_ row: Int) {
     guard row < tasks.count else { return }
     let task = tasks[row]
-    presenter?.share(task: task)
+    presenter.share(task: task)
   }
 
   func didTapNewTask() {
@@ -106,22 +106,22 @@ class TodoListInteractor: TodoListInteractorInput {
     task.isCompleted = false
     task.date = Date()
 
-    presenter?.createNewTask(task)
+    presenter.createNewTask(task)
   }
 
   func didSearchWith(_ searchString: String) {
     guard !searchString.isEmpty else {
-      presenter?.updateTasks(tasks, animated: false)
+      presenter.updateTasks(tasks, animated: false)
       return
     }
     
     filteredTasks = tasks.filter({$0.title.lowercased().contains(searchString.lowercased()) || $0.description.lowercased().contains(searchString.lowercased())})
-    presenter?.updateTasks(filteredTasks, animated: false)
+    presenter.updateTasks(filteredTasks, animated: false)
   }
 
   func didFinishSearch() {
     filteredTasks = []
-    presenter?.updateTasks(tasks, animated: false)
+    presenter.updateTasks(tasks, animated: false)
   }
 
   func getToolBarLabelText(for taskCount: Int) -> String? {

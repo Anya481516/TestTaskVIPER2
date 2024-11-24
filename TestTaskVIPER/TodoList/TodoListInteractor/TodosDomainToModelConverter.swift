@@ -23,8 +23,7 @@ class TodosDomainToModelConverter {
     task.title = domainTodo.todo
     task.taskDescription = domainTodo.todo // nil
     task.isCompleted = domainTodo.isCompleted
-    task.date = Date()//.getFormattedDate(format: "dd/MM/yyy") // nil
-    //task.datedate = Date()
+    task.date = Date()
 
     return task
   }

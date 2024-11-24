@@ -27,6 +27,7 @@ class TodoListTableViewCell: UITableViewCell {
     super.prepareForReuse()
 
     statusImageView.image = nil
+    mainStackView.prepareForReuse()
   }
 
   required init?(coder: NSCoder) {

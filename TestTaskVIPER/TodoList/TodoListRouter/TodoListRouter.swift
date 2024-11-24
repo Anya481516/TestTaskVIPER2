@@ -17,17 +17,17 @@ protocol TodoListRouterInput: AnyObject {
 
 class TodoListRouter: TodoListRouterInput {
 
-  weak var view: UIViewController?
-  weak var presenter: TodoListInteractorOutput?
+  weak var view: UIViewController!
+  //weak var presenter: TodoListInteractorOutput!
 
   func navigateToTaskDetail(for task: TodoTask) {
     let taskViewController = TaskAssembly.buildTaskModule(task: task, type: .existing)
-    view?.show(taskViewController, sender: nil)
+    view.show(taskViewController, sender: nil)
   }
 
   func navigateToNewTask(_ task: TodoTask) {
     let taskViewController = TaskAssembly.buildTaskModule(task: task, type: .new)
-    view?.show(taskViewController, sender: nil)
+    view.show(taskViewController, sender: nil)
   }
 
   func share(task: TodoTask) {
@@ -39,7 +39,7 @@ class TodoListRouter: TodoListRouterInput {
         activityItems: [label, description, date], applicationActivities: nil)
 
     activityViewController.isModalInPresentation = true
-    view?.present(activityViewController, animated: true, completion: nil)
+    view.present(activityViewController, animated: true, completion: nil)
   }
 
   func showError(_ error: Error) {
@@ -52,13 +52,13 @@ class TodoListRouter: TodoListRouterInput {
       title: "Ok",
       style: .default
     ) { action in
-      self.view?.dismiss(animated: true)
+      self.view.dismiss(animated: true)
     }
 
     alert.addAction(okAction)
 
     DispatchQueue.main.async { [weak self] in
-      self?.view?.present(alert, animated: true)
+      self?.view.present(alert, animated: true)
     }
   }
 }
