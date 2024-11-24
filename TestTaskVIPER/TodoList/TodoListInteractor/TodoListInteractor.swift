@@ -18,6 +18,7 @@ protocol TodoListInteractorInput: AnyObject {
   func didFinishSearch()
   func didTapNewTask()
   func getToolBarLabelText(for taskCount: Int) -> String?
+  func getTask(_ row: Int) -> TodoTask?
 }
 
 enum CuError: Error {
@@ -73,24 +74,25 @@ class TodoListInteractor: TodoListInteractorInput {
   }
 
   func deleteTaskAt(_ row: Int) {
-    let task = tasks[row]
-    coreDataManager.delete(task)
-    tasks.remove(at: row)
+    coreDataManager.delete(tasks.remove(at: row))
     presenter?.updateTasks(tasks, animated: true)
   }
 
   func changeStatusOfTaskAt(_ row: Int) {
+    guard row < tasks.count else { return }
     tasks[row].isCompleted.toggle()
     coreDataManager.saveContext()
     presenter?.updateTasks(tasks, animated: false)
   }
 
   func editTaskAt(_ row: Int) {
+    guard row < tasks.count else { return }
     let task = tasks[row]
     presenter?.editTask(task)
   }
 
   func shareTaskAt(_ row: Int) {
+    guard row < tasks.count else { return }
     let task = tasks[row]
     presenter?.share(task: task)
   }
@@ -112,7 +114,7 @@ class TodoListInteractor: TodoListInteractorInput {
       return
     }
     
-    filteredTasks = tasks.filter({$0.title.lowercased().prefix(searchString.count) == searchString.lowercased() || $0.description.lowercased().prefix(searchString.count) == searchString.lowercased()})
+    filteredTasks = tasks.filter({$0.title.lowercased().contains(searchString.lowercased()) || $0.description.lowercased().contains(searchString.lowercased())})
     presenter?.updateTasks(filteredTasks, animated: false)
   }
 
@@ -133,6 +135,11 @@ class TodoListInteractor: TodoListInteractorInput {
     default:
       return nil
     }
+  }
+
+  func getTask(_ row: Int) -> TodoTask? {
+    guard row < tasks.count else { return nil }
+    return tasks[row]
   }
 }
 

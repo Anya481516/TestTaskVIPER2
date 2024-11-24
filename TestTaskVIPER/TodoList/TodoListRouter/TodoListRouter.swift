@@ -21,8 +21,6 @@ class TodoListRouter: TodoListRouterInput {
   weak var presenter: TodoListInteractorOutput?
 
   func navigateToTaskDetail(for task: TodoTask) {
-    // TODO: write realization
-
     let taskViewController = TaskAssembly.buildTaskModule(task: task, type: .existing)
     view?.show(taskViewController, sender: nil)
   }
@@ -34,7 +32,7 @@ class TodoListRouter: TodoListRouterInput {
 
   func share(task: TodoTask) {
     let label = task.title
-    let description = task.description
+    let description = task.taskDescription
     let date = task.date.getFormattedDate(format: "dd/MM/yyy")
 
     let activityViewController : UIActivityViewController = UIActivityViewController(

@@ -18,6 +18,7 @@ protocol TodoListPresenterInput: AnyObject {
   func didSearchWith(_ searchString: String)
   func didFinishSearch()
   func getToolBarLabelText(for taskCount: Int) -> String?
+  func getTask(_ row: Int) -> TodoTask?
 }
 
 protocol TodoListPresenterOutput: AnyObject {
@@ -68,6 +69,10 @@ class TodoListPresenter: TodoListPresenterInput, TodoListInteractorOutput {
 
   func getToolBarLabelText(for taskCount: Int) -> String? {
     interactor?.getToolBarLabelText(for: taskCount)
+  }
+
+  func getTask(_ row: Int) -> TodoTask? {
+    interactor?.getTask(row)
   }
 
 

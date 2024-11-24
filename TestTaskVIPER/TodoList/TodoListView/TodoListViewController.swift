@@ -32,6 +32,7 @@ class TodoListViewController: UIViewController, TodoListPresenterOutput {
     let label = UILabel()
     label.font = UIFont.boldSystemFont(ofSize: 11)
     label.textAlignment = NSTextAlignment.center
+    label.setContentCompressionResistancePriority(.defaultHigh, for: .horizontal)
     return label
   }()
 
@@ -103,6 +104,7 @@ class TodoListViewController: UIViewController, TodoListPresenterOutput {
   @objc func add(_ sender: UIBarButtonItem) {
     presenter?.didTapNewTask()
   }
+
 }
 
 extension TodoListViewController: UITableViewDelegate {
@@ -137,57 +139,47 @@ extension TodoListViewController: UITableViewDelegate {
       return UIMenu(children: [editAction, shareAction, deleteAction])
     }
 
-    return UIContextMenuConfiguration(
-      identifier: identifier,
-      previewProvider: nil,
-      actionProvider: actionProvider
-    )
-
-
-//    return UIContextMenuConfiguration(identifier: identifier, previewProvider: nil) { action in
-//      let editAction = UIAction(title: "Редактировать", image: UIImage(systemName: "square.and.pencil")) { [weak self] _ in
-//        self?.presenter?.didTapEditTaskAt(indexPath.row)
-//      }
-//
-//      let shareAction = UIAction(title: "Поделиться", image: UIImage(systemName: "square.and.arrow.up")) { [weak self] _ in
-//        self?.presenter?.didTapShareTaskAt(indexPath.row)
-//      }
-//
-//      let deleteAction = UIAction(title: "Удалить", image: UIImage(systemName: "trash")) { [weak self] _ in
-//        self?.presenter?.didTapDeleteTaskAt(indexPath.row)
-//      }
-//
-////      let actionProvider: UIContextMenuActionProvider = { _ in
-////        return UIMenu(children: [editAction, shareAction, deleteAction])
-////      }
-////
-////      return UIContextMenuConfiguration(identifier: indexPath as NSCopying, previewProvider: {
-////        return CustomPreviewViewController(item: selectedItem)
-////      }, actionProvider: actionProvider)
-//
-////      let index = indexPath.row
-////      let identifier = "\(index)" as NSString
-////
-////      return UIContextMenuConfiguration(identifier: identifier, previewProvider: nil, actionProvider: actionProvider)
-//
-//      return UIMenu(children: [editAction, shareAction, deleteAction])
-//    }
-  }
-
-  func tableView(_ tableView: UITableView,
-    previewForHighlightingContextMenuWithConfiguration
-    configuration: UIContextMenuConfiguration
-  ) -> UITargetedPreview? {
-    guard
-      let identifier = configuration.identifier as? String,
-      let index = Int(identifier),
-      let cell = tableView.cellForRow(at: IndexPath(row: index, section: 0)) as? TodoListTableViewCell
-      else {
-        return nil
+    var previewProvider: TodoPreviewViewController?
+    if let task = presenter?.getTask(indexPath.row) {
+      previewProvider = TodoPreviewViewController(task: task)
+      //previewProvider!.preferredContentSize = CGSize(width: previewProvider!.view.frame.width, height: previewProvider!.view.frame.height)
     }
 
-    return UITargetedPreview(view: cell.mainStackView)
+//    let previewParams = UIPreviewParameters()
+//    previewParams.backgroundColor = .clear
+//
+//    var targetedPreview: UITargetedPreview
+//
+//    if let task = presenter?.getTask(indexPath.row) {
+//      let preview = TodoPreviewView(task: task)
+//      previewParams.visiblePath = UIBezierPath(roundedRect: preview.bounds, cornerRadius: 10)
+//      let target = UIPreviewTarget(container: preview.superview!, center: preview.center)
+//      targetedPreview = UITargetedPreview(view: preview, parameters: previewParams, target: target)
+//    }
+
+    //let provider: UIContextMenuContentPreviewProvider
+
+    return UIContextMenuConfiguration(
+      identifier: identifier,
+      previewProvider: { previewProvider },
+      actionProvider: actionProvider
+    )
   }
+
+//  func tableView(_ tableView: UITableView,
+//    previewForHighlightingContextMenuWithConfiguration
+//    configuration: UIContextMenuConfiguration
+//  ) -> UITargetedPreview? {
+//    guard
+//      let identifier = configuration.identifier as? String,
+//      let index = Int(identifier),
+//      let cell = tableView.cellForRow(at: IndexPath(row: index, section: 0)) as? TodoListTableViewCell
+//      else {
+//        return nil
+//    }
+//
+//    return UITargetedPreview(view: cell.mainStackView)
+//  }
 }
 
 extension TodoListViewController: UISearchBarDelegate {
