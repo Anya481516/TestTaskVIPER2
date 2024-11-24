@@ -16,14 +16,10 @@ protocol TaskInteractorOutput: AnyObject {
 }
 
 class TaskInteractor: TaskInteractorInput {
-  func save() {
-    
-  }
-  
 
   weak var presenter: TaskInteractorOutput?
   lazy var coreDataManager = CoreDataManager.shared
-
+  
   func viewWIllDisappear(with task: TodoTask) {
     guard !task.title.isEmpty || !task.taskDescription.isEmpty else {
       coreDataManager.delete(task)

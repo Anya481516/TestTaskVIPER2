@@ -11,8 +11,5 @@ import CoreData
 
 @objc(TodoTask)
 public class TodoTask: NSManagedObject {
-
-  func changeStatus() {
-    self.isCompleted.toggle()
-  }
+  
 }

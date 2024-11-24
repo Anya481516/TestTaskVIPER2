@@ -19,7 +19,6 @@ class TaskPresenter: TaskPresenterInput, TaskInteractorOutput {
 
   weak var view: TaskPresenterOutput?
   var interactor: TaskInteractorInput?
-  //var router: TaskRouterInput?
 
   func viewWIllDisappear(with task: TodoTask) {
     interactor?.viewWIllDisappear(with: task)

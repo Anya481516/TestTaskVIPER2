@@ -35,19 +35,19 @@ protocol TodoListInteractorOutput: AnyObject {
 }
 
 class TodoListInteractor: TodoListInteractorInput {
-
+  
   weak var presenter: TodoListInteractorOutput!
-
+  
   private let networkManager: NetwokManager = NetwokManager(with: .default)
   private let converter = TodosDomainToModelConverter()
-
+  
   private var tasks: [TodoTask] = []
   private var filteredTasks: [TodoTask] = []
-
+  
   lazy var coreDataManager = CoreDataManager.shared
-
+  
   var isSearching = false
-
+  
   func viewDidLoad() {
     let savedTasks = coreDataManager.obtainData()
     if !savedTasks.isEmpty {
@@ -70,7 +70,7 @@ class TodoListInteractor: TodoListInteractorInput {
       }
     }
   }
-
+  
   func viewWillAppear() {
     let savedTasks = coreDataManager.obtainData()
     tasks = savedTasks
@@ -79,31 +79,31 @@ class TodoListInteractor: TodoListInteractorInput {
     }
     presenter.showTasks()
   }
-
+  
   func deleteTaskAt(_ row: Int) {
     coreDataManager.delete(tasks.remove(at: row))
     presenter.showTasks()
   }
-
+  
   func changeStatusOfTaskAt(_ row: Int) {
     guard row < tasks.count else { return }
     filteredTasks[row].isCompleted.toggle()
     coreDataManager.saveContext()
     presenter.showTasks()
   }
-
+  
   func editTaskAt(_ row: Int) {
     guard row < filteredTasks.count else { return }
     let task = filteredTasks[row]
     presenter.editTask(task)
   }
-
+  
   func shareTaskAt(_ row: Int) {
     guard row < tasks.count else { return }
     let task = filteredTasks[row]
     presenter.share(task: task)
   }
-
+  
   func didTapNewTask() {
     let task = TodoTask(context: coreDataManager.persistentContainer.viewContext)
     task.id = UUID().uuidString
@@ -111,10 +111,10 @@ class TodoListInteractor: TodoListInteractorInput {
     task.taskDescription = ""
     task.isCompleted = false
     task.date = Date()
-
+    
     presenter.createNewTask(task)
   }
-
+  
   func didSearchWith(_ searchString: String) {
     guard !searchString.isEmpty else {
       isSearching = false
@@ -126,13 +126,13 @@ class TodoListInteractor: TodoListInteractorInput {
     filteredTasks = tasks.filter({$0.title.lowercased().contains(searchString.lowercased()) || $0.description.lowercased().contains(searchString.lowercased())})
     presenter.showTasks()
   }
-
+  
   func didFinishSearch() {
     isSearching = false
     filteredTasks = tasks
     presenter.showTasks()
   }
-
+  
   func getToolBarLabelText(for taskCount: Int) -> String? {
     let lastNumber = taskCount % 10
     switch lastNumber {
@@ -146,13 +146,12 @@ class TodoListInteractor: TodoListInteractorInput {
       return nil
     }
   }
-
+  
   func getTask(_ row: Int) -> TodoTask {
     return filteredTasks[row]
   }
-
+  
   func getTasksCount() -> Int {
     return filteredTasks.count
   }
 }
-

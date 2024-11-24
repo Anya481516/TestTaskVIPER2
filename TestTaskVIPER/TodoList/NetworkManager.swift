@@ -26,24 +26,24 @@ struct Todos: Codable, Hashable {
 }
 
 class NetwokManager {
-
+  
   private let session: URLSession
-
+  
   lazy var jsonDecoder: JSONDecoder = {
     JSONDecoder()
   }()
-
+  
   init(with configuration: URLSessionConfiguration) {
     session = URLSession(configuration: configuration)
   }
-
+  
   func obtainTasks() async throws -> Todos? {
     guard let url = URL(string: "https://dummyjson.com/todos") else { return nil }
     var urlRequest = URLRequest(url: url)
     urlRequest.httpMethod = "GET"
-
+    
     let responseData = try await session.data(for: urlRequest)
-
+    
     return try jsonDecoder.decode(Todos.self, from: responseData.0)
   }
 }

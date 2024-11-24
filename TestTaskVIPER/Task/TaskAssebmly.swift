@@ -15,21 +15,16 @@ class TaskAssembly {
     let view = TaskViewController(task: task, type: type)
     let interactor = TaskInteractor()
     let presenter = TaskPresenter()
-    //let router = TaskRouter()
-
+    
     view.presenter = presenter
-
+    
     presenter.view = view
     presenter.interactor = interactor
-    //presenter.router = router
-
+    
     interactor.presenter = presenter
-
-    //router.view = view
-
+    
     return view
   }
-
+  
   private init() {}
 }
-

@@ -8,15 +8,15 @@
 import UIKit
 
 class TodoPreviewViewController: UIViewController {
-
+  
   private lazy var mainStackView: MainStackView = {
     let view = MainStackView()
     view.translatesAutoresizingMaskIntoConstraints = false
     return view
   }()
-
+  
   private let task: TodoTask
-
+  
   init(
     task: TodoTask
   ) {
@@ -24,14 +24,14 @@ class TodoPreviewViewController: UIViewController {
     super.init(nibName: nil, bundle: nil)
     setupUI()
   }
-
+  
   required init?(coder: NSCoder) {
     fatalError("init(coder:) has not been implemented")
   }
-
+  
   private func setupUI() {
     view.addSubview(mainStackView)
-
+    
     NSLayoutConstraint.activate([
       mainStackView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 16),
       mainStackView.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 16),
@@ -40,7 +40,7 @@ class TodoPreviewViewController: UIViewController {
     
     mainStackView.configure(with: task)
   }
-
+  
   func getContentSize() -> CGSize {
     let width = view.bounds.width
     let height = mainStackView.getContentHeight()
