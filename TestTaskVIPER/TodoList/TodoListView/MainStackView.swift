@@ -47,7 +47,6 @@ class MainStackView: UIStackView {
     
     translatesAutoresizingMaskIntoConstraints = false
     axis = .vertical
-    distribution = .fillEqually
     spacing = Constants.spacing
   }
   
@@ -82,6 +81,6 @@ class MainStackView: UIStackView {
     let descriptionHeight = descriptionLabel.text?.height(constraintedWidth: width, font: Constants.descriptionFont, numberOfLines: 2) ?? 0
     let dateHeight = descriptionLabel.text?.height(constraintedWidth: width, font: Constants.dateFont, numberOfLines: 1) ?? 0
 
-    return titleHeight + descriptionHeight + dateHeight + Constants.spacing * 4
+    return titleHeight + descriptionHeight + dateHeight + Constants.spacing * 2
   }
 }
