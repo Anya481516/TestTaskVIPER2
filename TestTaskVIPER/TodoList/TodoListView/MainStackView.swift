@@ -7,12 +7,19 @@
 
 import UIKit
 
+private enum Constants {
+  static let titleFont = UIFont.boldSystemFont(ofSize: 16)
+  static let descriptionFont = UIFont.systemFont(ofSize: 12)
+  static let dateFont = UIFont.systemFont(ofSize: 12)
+  static let spacing: CGFloat = 6
+}
+
 class MainStackView: UIStackView {
   private lazy var titleLabel: UILabel = {
     let label = UILabel()
     label.translatesAutoresizingMaskIntoConstraints = false
     label.numberOfLines = 1
-    label.font = UIFont.boldSystemFont(ofSize: 16)
+    label.font = Constants.titleFont
     return label
   }()
   
@@ -20,19 +27,17 @@ class MainStackView: UIStackView {
     let label = UILabel()
     label.translatesAutoresizingMaskIntoConstraints = false
     label.numberOfLines = 2
-    label.font = UIFont.systemFont(ofSize: 12)
+    label.font = Constants.descriptionFont
     return label
   }()
   
   private lazy var dateLabel: UILabel = {
     let label = UILabel()
     label.translatesAutoresizingMaskIntoConstraints = false
-    label.font = UIFont.systemFont(ofSize: 12)
+    label.font = Constants.dateFont
     label.textColor = .systemGray
     return label
   }()
-  
-  private var titleText = ""
   
   override init(frame: CGRect) {
     super.init(frame: frame)
@@ -43,7 +48,7 @@ class MainStackView: UIStackView {
     translatesAutoresizingMaskIntoConstraints = false
     axis = .vertical
     distribution = .fillEqually
-    spacing = 6
+    spacing = Constants.spacing
   }
   
   required init(coder: NSCoder) {
@@ -51,8 +56,7 @@ class MainStackView: UIStackView {
   }
   
   func configure(with task: TodoTask) {
-    titleText = task.title
-    titleLabel.text = titleText
+    titleLabel.text = task.title
     descriptionLabel.text = task.taskDescription
     dateLabel.text = task.date.getFormattedDate(format: "dd/MM/yyyy")
   }
@@ -72,7 +76,12 @@ class MainStackView: UIStackView {
     titleLabel.attributedText = nil
   }
   
-  func getContentHeight() -> CGFloat {
-    return titleLabel.bounds.height + descriptionLabel.bounds.height + dateLabel.bounds.height + 12
+  func getContentHeight(width: CGFloat) -> CGFloat {
+
+    let titleHeight = titleLabel.text?.height(constraintedWidth: width, font: Constants.titleFont, numberOfLines: 1) ?? 0
+    let descriptionHeight = descriptionLabel.text?.height(constraintedWidth: width, font: Constants.descriptionFont, numberOfLines: 2) ?? 0
+    let dateHeight = descriptionLabel.text?.height(constraintedWidth: width, font: Constants.dateFont, numberOfLines: 1) ?? 0
+
+    return titleHeight + descriptionHeight + dateHeight + Constants.spacing * 4
   }
 }

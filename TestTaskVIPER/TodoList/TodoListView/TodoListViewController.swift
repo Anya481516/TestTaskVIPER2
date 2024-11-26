@@ -146,22 +146,7 @@ extension TodoListViewController: UITableViewDelegate {
 
     let task = presenter.getTask(indexPath.row)
     let previewProvider = TodoPreviewViewController(task: task)
-    previewProvider.loadViewIfNeeded()
     previewProvider.preferredContentSize = previewProvider.getContentSize()
-
-    //    let previewParams = UIPreviewParameters()
-    //    previewParams.backgroundColor = .clear
-    //
-    //    var targetedPreview: UITargetedPreview
-    //
-    //    if let task = presenter.getTask(indexPath.row) {
-    //      let preview = TodoPreviewView(task: task)
-    //      previewParams.visiblePath = UIBezierPath(roundedRect: preview.bounds, cornerRadius: 10)
-    //      let target = UIPreviewTarget(container: preview.superview!, center: preview.center)
-    //      targetedPreview = UITargetedPreview(view: preview, parameters: previewParams, target: target)
-    //    }
-
-    //let provider: UIContextMenuContentPreviewProvider
 
     return UIContextMenuConfiguration(
       identifier: identifier,
@@ -169,21 +154,6 @@ extension TodoListViewController: UITableViewDelegate {
       actionProvider: actionProvider
     )
   }
-
-  //  func tableView(_ tableView: UITableView,
-  //    previewForHighlightingContextMenuWithConfiguration
-  //    configuration: UIContextMenuConfiguration
-  //  ) -> UITargetedPreview? {
-  //    guard
-  //      let identifier = configuration.identifier as? String,
-  //      let index = Int(identifier),
-  //      let cell = tableView.cellForRow(at: IndexPath(row: index, section: 0)) as? TodoListTableViewCell
-  //      else {
-  //        return nil
-  //    }
-  //
-  //    return UITargetedPreview(view: cell.mainStackView)
-  //  }
 }
 
 // MARK: - UISearchBarDelegate

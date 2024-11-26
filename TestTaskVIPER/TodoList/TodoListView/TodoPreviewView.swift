@@ -16,7 +16,7 @@ class TodoPreviewViewController: UIViewController {
   }()
   
   private let task: TodoTask
-  
+
   init(
     task: TodoTask
   ) {
@@ -42,8 +42,8 @@ class TodoPreviewViewController: UIViewController {
   }
   
   func getContentSize() -> CGSize {
-    let width = view.bounds.width
-    let height = mainStackView.getContentHeight()
+    let width = view.bounds.width - 32
+    let height = mainStackView.getContentHeight(width: width) + 32
     return CGSize(width: width, height: height)
   }
 }
