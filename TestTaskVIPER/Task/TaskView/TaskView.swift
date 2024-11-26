@@ -14,7 +14,19 @@ class TaskView: UIView {
     case existing
   }
 
-  lazy var titleTextView: UITextView = {
+  private lazy var scrollView: UIScrollView = {
+    let scroll = UIScrollView()
+    scroll.translatesAutoresizingMaskIntoConstraints = false
+    return scroll
+  }()
+
+  private lazy var contentView: UIView = {
+    let view = UIView()
+    view.translatesAutoresizingMaskIntoConstraints = false
+    return view
+  }()
+
+  private(set) lazy var titleTextView: UITextView = {
     let text = UITextView()
     text.translatesAutoresizingMaskIntoConstraints = false
     text.font = UIFont.boldSystemFont(ofSize: 34)
@@ -31,7 +43,7 @@ class TaskView: UIView {
     return label
   }()
 
-  lazy var descriptionTextView: UITextView = {
+  private(set) lazy var descriptionTextView: UITextView = {
     let text = UITextView()
     text.translatesAutoresizingMaskIntoConstraints = false
     text.font = UIFont.systemFont(ofSize: 16)
@@ -58,30 +70,47 @@ class TaskView: UIView {
   }
 
   private func setupUI() {
-    addSubview(titleTextView)
+    addSubview(scrollView)
+    scrollView.addSubview(contentView)
+
+    contentView.addSubview(titleTextView)
+    contentView.addSubview(dateLabel)
+    contentView.addSubview(descriptionTextView)
+
     titleTextView.text = task.title
-    addSubview(dateLabel)
     dateLabel.text = task.date.getFormattedDate(format: "dd/MM/yyy")
-    addSubview(descriptionTextView)
     descriptionTextView.text = task.taskDescription
+
     setupLayout()
   }
 
-  func setupLayout() {
+  private func setupLayout() {
     NSLayoutConstraint.activate([
-      titleTextView.topAnchor.constraint(equalTo: safeAreaLayoutGuide.topAnchor),
-      titleTextView.leadingAnchor.constraint(equalTo: leadingAnchor, constant: 16),
-      titleTextView.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -16),
+      scrollView.topAnchor.constraint(equalTo: safeAreaLayoutGuide.topAnchor),
+      scrollView.leadingAnchor.constraint(equalTo: leadingAnchor),
+      scrollView.trailingAnchor.constraint(equalTo: trailingAnchor),
+      scrollView.bottomAnchor.constraint(equalTo: safeAreaLayoutGuide.bottomAnchor),
+
+      contentView.topAnchor.constraint(equalTo: scrollView.topAnchor),
+      contentView.leadingAnchor.constraint(equalTo: scrollView.leadingAnchor),
+      contentView.trailingAnchor.constraint(equalTo: scrollView.trailingAnchor),
+      contentView.bottomAnchor.constraint(equalTo: scrollView.bottomAnchor),
+
+      contentView.widthAnchor.constraint(equalTo: scrollView.widthAnchor),
+
+      titleTextView.topAnchor.constraint(equalTo: contentView.topAnchor, constant: 16),
+      titleTextView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 16),
+      titleTextView.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -16),
       titleTextView.heightAnchor.constraint(greaterThanOrEqualToConstant: 48),
 
       dateLabel.topAnchor.constraint(equalTo: titleTextView.bottomAnchor, constant: 8),
-      dateLabel.leadingAnchor.constraint(equalTo: leadingAnchor, constant: 16),
-      dateLabel.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -16),
+      dateLabel.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 16),
+      dateLabel.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -16),
 
       descriptionTextView.topAnchor.constraint(equalTo: dateLabel.bottomAnchor, constant: 16),
-      descriptionTextView.leadingAnchor.constraint(equalTo: leadingAnchor, constant: 16),
-      descriptionTextView.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -16),
-      descriptionTextView.heightAnchor.constraint(greaterThanOrEqualToConstant: 24),
+      descriptionTextView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 16),
+      descriptionTextView.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -16),
+      descriptionTextView.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: -16)
     ])
   }
 }
