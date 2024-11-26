@@ -12,13 +12,19 @@ private enum Constants {
   static let descriptionFont = UIFont.systemFont(ofSize: 12)
   static let dateFont = UIFont.systemFont(ofSize: 12)
   static let spacing: CGFloat = 6
+  static let dateLabelNumberOfLines: Int = 1
 }
 
 class MainStackView: UIStackView {
+
+  enum StackViewType {
+    case cell
+    case preview
+  }
+
   private lazy var titleLabel: UILabel = {
     let label = UILabel()
     label.translatesAutoresizingMaskIntoConstraints = false
-    label.numberOfLines = 1
     label.font = Constants.titleFont
     return label
   }()
@@ -26,7 +32,6 @@ class MainStackView: UIStackView {
   private lazy var descriptionLabel: UILabel = {
     let label = UILabel()
     label.translatesAutoresizingMaskIntoConstraints = false
-    label.numberOfLines = 2
     label.font = Constants.descriptionFont
     return label
   }()
@@ -36,19 +41,43 @@ class MainStackView: UIStackView {
     label.translatesAutoresizingMaskIntoConstraints = false
     label.font = Constants.dateFont
     label.textColor = .systemGray
+    label.numberOfLines = Constants.dateLabelNumberOfLines
     return label
   }()
-  
-  override init(frame: CGRect) {
-    super.init(frame: frame)
+
+  private var titleLabelNumberOfLines: Int
+  private var descriptionLabelNumberOfLines: Int
+
+  init(type: StackViewType) {
+    switch type {
+    case .cell:
+      titleLabelNumberOfLines = 1
+      descriptionLabelNumberOfLines = 2
+    case .preview:
+      titleLabelNumberOfLines = 0
+      descriptionLabelNumberOfLines = 0
+    }
+
+    super.init(frame: .zero)
+
+    titleLabel.numberOfLines = titleLabelNumberOfLines
+    descriptionLabel.numberOfLines = descriptionLabelNumberOfLines
+    dateLabel.numberOfLines = Constants.dateLabelNumberOfLines
+
     addArrangedSubview(titleLabel)
     addArrangedSubview(descriptionLabel)
     addArrangedSubview(dateLabel)
-    
+
     translatesAutoresizingMaskIntoConstraints = false
     axis = .vertical
     spacing = Constants.spacing
   }
+
+//  override init(frame: CGRect) {
+//    super.init(frame: frame)
+//
+//
+//  }
   
   required init(coder: NSCoder) {
     fatalError("init(coder:) has not been implemented")
@@ -77,9 +106,9 @@ class MainStackView: UIStackView {
   
   func getContentHeight(width: CGFloat) -> CGFloat {
 
-    let titleHeight = titleLabel.text?.height(constraintedWidth: width, font: Constants.titleFont, numberOfLines: 1) ?? 0
-    let descriptionHeight = descriptionLabel.text?.height(constraintedWidth: width, font: Constants.descriptionFont, numberOfLines: 2) ?? 0
-    let dateHeight = descriptionLabel.text?.height(constraintedWidth: width, font: Constants.dateFont, numberOfLines: 1) ?? 0
+    let titleHeight = titleLabel.text?.height(constraintedWidth: width, font: Constants.titleFont, numberOfLines: titleLabelNumberOfLines) ?? 0
+    let descriptionHeight = descriptionLabel.text?.height(constraintedWidth: width, font: Constants.descriptionFont, numberOfLines: descriptionLabelNumberOfLines) ?? 0
+    let dateHeight = descriptionLabel.text?.height(constraintedWidth: width, font: Constants.dateFont, numberOfLines: Constants.dateLabelNumberOfLines) ?? 0
 
     return titleHeight + descriptionHeight + dateHeight + Constants.spacing * 2
   }

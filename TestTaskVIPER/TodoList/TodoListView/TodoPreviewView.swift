@@ -10,7 +10,7 @@ import UIKit
 class TodoPreviewViewController: UIViewController {
   
   private lazy var mainStackView: MainStackView = {
-    let view = MainStackView()
+    let view = MainStackView(type: .preview)
     view.translatesAutoresizingMaskIntoConstraints = false
     return view
   }()

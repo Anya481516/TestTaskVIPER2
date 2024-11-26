@@ -15,7 +15,7 @@ class TodoListTableViewCell: UITableViewCell {
     return imageView
   }()
 
-  private var mainStackView = MainStackView()
+  private var mainStackView = MainStackView(type: .cell)
 
   override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
     super.init(style: style, reuseIdentifier: reuseIdentifier)
