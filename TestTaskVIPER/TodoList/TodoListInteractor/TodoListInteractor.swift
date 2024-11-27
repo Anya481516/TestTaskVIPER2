@@ -81,7 +81,9 @@ class TodoListInteractor: TodoListInteractorInput {
   }
   
   func deleteTaskAt(_ row: Int) {
-    coreDataManager.delete(tasks.remove(at: row))
+    let task = filteredTasks.remove(at: row)
+    tasks.removeAll(where: { $0 == task })
+    coreDataManager.delete(task)
     presenter.showTasks()
   }
   
