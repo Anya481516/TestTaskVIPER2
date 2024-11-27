@@ -44,10 +44,10 @@ class TodoListInteractor: TodoListInteractorInput {
   private var tasks: [TodoTask] = []
   private var filteredTasks: [TodoTask] = []
   
-  lazy var coreDataManager = CoreDataManager.shared
-  
-  var isSearching = false
-  
+  private lazy var coreDataManager = CoreDataManager.shared
+
+  private var isSearching = false
+
   func viewDidLoad() {
     let savedTasks = coreDataManager.obtainData()
     if !savedTasks.isEmpty {

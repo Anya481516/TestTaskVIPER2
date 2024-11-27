@@ -16,7 +16,7 @@ class CoreDataManager {
 
   // MARK: - Core Data stack
 
-  lazy var persistentContainer: NSPersistentContainer = {
+  private(set) lazy var persistentContainer: NSPersistentContainer = {
     let container = NSPersistentContainer(name: "TestTaskVIPER")
     container.loadPersistentStores(completionHandler: { (storeDescription, error) in
       if let error = error as NSError? {
@@ -25,8 +25,6 @@ class CoreDataManager {
     })
     return container
   }()
-
-  // MARK: - Core Data Saving support
 
   func saveContext () {
     let context = persistentContainer.viewContext

@@ -40,7 +40,7 @@ extension UIColor {
     self.init(red: CGFloat(red) / 255, green: CGFloat(green) / 255, blue: CGFloat(blue) / 255, alpha: CGFloat(alpha) / 255)
   }
 
-  func toHexString(includeAlpha: Bool = false) -> String? {
+  private func toHexString(includeAlpha: Bool = false) -> String? {
     guard let components = self.cgColor.components else {
       return nil
     }

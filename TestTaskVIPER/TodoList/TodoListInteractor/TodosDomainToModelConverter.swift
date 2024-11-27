@@ -9,8 +9,8 @@ import Foundation
 
 class TodosDomainToModelConverter {
   
-  lazy var dataManager = CoreDataManager.shared
-  
+  private lazy var dataManager = CoreDataManager.shared
+
   func convert(_ domain: Todos?) -> [TodoTask] {
     guard let todos = domain?.todos else { return [] }
     
