@@ -33,6 +33,7 @@ class TodoListViewController: UIViewController, TodoListPresenterOutput {
     label.font = UIFont.boldSystemFont(ofSize: 11)
     label.textAlignment = NSTextAlignment.center
     label.setContentCompressionResistancePriority(.defaultHigh, for: .horizontal)
+    label.sizeToFit()
     return label
   }()
   
@@ -62,9 +63,10 @@ class TodoListViewController: UIViewController, TodoListPresenterOutput {
   
   func updateUI() {
     tableView.reloadData()
+    toolBarTitleLabel.sizeToFit()
     toolBarTitleLabel.text = presenter.getToolBarLabelText()
   }
-  
+
   func setupToolBar() {
     var items = [UIBarButtonItem]()
     

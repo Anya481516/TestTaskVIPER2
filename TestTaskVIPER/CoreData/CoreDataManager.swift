@@ -26,34 +26,49 @@ class CoreDataManager {
     return container
   }()
 
-  func saveContext () {
+  func saveContext() {
     let context = persistentContainer.viewContext
-    if context.hasChanges {
-      do {
-        try context.save()
-      } catch {
-        let nserror = error as NSError
-        fatalError("Unresolved error \(nserror), \(nserror.userInfo)")
+    DispatchQueue.global(qos: .default).async {
+      if context.hasChanges {
+        do {
+          try context.save()
+        } catch {
+          let nserror = error as NSError
+          print("Unresolved error \(nserror), \(nserror.userInfo)")
+        }
       }
     }
   }
 
-  func obtainData() -> [TodoTask] {
-    let taskFetchRequest = TodoTask.fetchRequest()
-    let dateSortDescriptor = NSSortDescriptor(key: "date", ascending: true)
-    let idSortDescriptor = NSSortDescriptor(key: "id", ascending: true)
-    taskFetchRequest.sortDescriptors = [dateSortDescriptor, idSortDescriptor]
 
+  func obtainData(completion: @escaping ([TodoTask]) -> Void) {
     let context = persistentContainer.viewContext
-    let result = try? context.fetch(taskFetchRequest)
+    DispatchQueue.global(qos: .default).async {
+      let taskFetchRequest = TodoTask.fetchRequest()
+      let dateSortDescriptor = NSSortDescriptor(key: "date", ascending: true)
+      let idSortDescriptor = NSSortDescriptor(key: "id", ascending: true)
+      taskFetchRequest.sortDescriptors = [dateSortDescriptor, idSortDescriptor]
 
-    return result ?? []
+      do {
+        let result = try context.fetch(taskFetchRequest)
+        DispatchQueue.main.async {
+          completion(result)
+        }
+      } catch {
+        print("Failed to fetch TodoTask: \(error)")
+        DispatchQueue.main.async {
+          completion([])
+        }
+      }
+    }
   }
 
   func delete(_ task: TodoTask) {
     let context = persistentContainer.viewContext
-
-    context.delete(task)
-    saveContext()
+    DispatchQueue.global(qos: .default).async { [weak self] in
+      guard let self else { return }
+      context.delete(task)
+      self.saveContext()
+    }
   }
 }

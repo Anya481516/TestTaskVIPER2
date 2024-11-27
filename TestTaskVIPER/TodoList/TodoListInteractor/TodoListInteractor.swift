@@ -49,11 +49,16 @@ class TodoListInteractor: TodoListInteractorInput {
   private var isSearching = false
 
   func viewDidLoad() {
-    let savedTasks = coreDataManager.obtainData()
+    coreDataManager.obtainData { [weak self] savedTasks in
+      self?.updateDataAfterLoading(savedTasks)
+    }
+  }
+
+  private func updateDataAfterLoading(_ savedTasks: [TodoTask]) {
     if !savedTasks.isEmpty {
       tasks = savedTasks
       filteredTasks = tasks
-      presenter?.showTasks()
+      presenter.showTasks()
     }
     else {
       Task {
@@ -70,16 +75,21 @@ class TodoListInteractor: TodoListInteractorInput {
       }
     }
   }
-  
+
   func viewWillAppear() {
-    let savedTasks = coreDataManager.obtainData()
+    coreDataManager.obtainData() { [weak self] savedTasks in
+      self?.updateDataAfterAppearing(savedTasks)
+    }
+  }
+
+  private func updateDataAfterAppearing(_ savedTasks: [TodoTask]) {
     tasks = savedTasks
     if !isSearching {
       filteredTasks = tasks
     }
     presenter.showTasks()
   }
-  
+
   func deleteTaskAt(_ row: Int) {
     let task = filteredTasks.remove(at: row)
     tasks.removeAll(where: { $0 == task })
