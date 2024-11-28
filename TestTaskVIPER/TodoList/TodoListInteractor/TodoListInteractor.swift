@@ -66,7 +66,7 @@ class TodoListInteractor: TodoListInteractorInput {
           let response = try await networkManager.obtainTasks()
           tasks = converter.convert(response)
           filteredTasks = tasks
-          coreDataManager.saveContext()
+          try coreDataManager.saveContext()
           presenter.showTasks()
         }
         catch {
@@ -91,19 +91,28 @@ class TodoListInteractor: TodoListInteractorInput {
   }
 
   func deleteTaskAt(_ row: Int) {
-    let task = filteredTasks.remove(at: row)
-    tasks.removeAll(where: { $0 == task })
-    coreDataManager.delete(task)
-    presenter.showTasks()
+    let task = filteredTasks[row]
+    do {
+      try coreDataManager.delete(task)
+      filteredTasks.remove(at: row)
+      tasks.removeAll(where: { $0 == task })
+      presenter.showTasks()
+    } catch {
+      presenter.showError(error)
+    }
   }
-  
+
   func changeStatusOfTaskAt(_ row: Int) {
     guard row < tasks.count else { return }
-    filteredTasks[row].isCompleted.toggle()
-    coreDataManager.saveContext()
-    presenter.showTasks()
+    do {
+      filteredTasks[row].isCompleted.toggle()
+      try coreDataManager.saveContext()
+      presenter.showTasks()
+    } catch {
+      presenter.showError(error)
+    }
   }
-  
+
   func editTaskAt(_ row: Int) {
     guard row < filteredTasks.count else { return }
     let task = filteredTasks[row]

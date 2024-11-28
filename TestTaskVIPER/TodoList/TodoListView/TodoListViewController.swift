@@ -67,7 +67,7 @@ class TodoListViewController: UIViewController, TodoListPresenterOutput {
     toolBarTitleLabel.text = presenter.getToolBarLabelText()
   }
 
-  func setupToolBar() {
+  private func setupToolBar() {
     var items = [UIBarButtonItem]()
     
     let barLabel = UIBarButtonItem(customView: toolBarTitleLabel)
@@ -86,12 +86,12 @@ class TodoListViewController: UIViewController, TodoListPresenterOutput {
     self.navigationController?.toolbar.tintColor = ColorScheme.cutsomYellow
   }
   
-  func setupDataSource() {
+  private func setupDataSource() {
     tableView.register(TodoListTableViewCell.self, forCellReuseIdentifier: TodoListTableViewCell.reuseIdentifier)
     tableView.dataSource = self
   }
   
-  @objc func add(_ sender: UIBarButtonItem) {
+  @objc private func add(_ sender: UIBarButtonItem) {
     presenter.didTapNewTask()
   }
 }

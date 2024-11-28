@@ -18,13 +18,18 @@ protocol TaskInteractorOutput: AnyObject {
 class TaskInteractor: TaskInteractorInput {
 
   weak var presenter: TaskInteractorOutput?
-  lazy var coreDataManager = CoreDataManager.shared
+  private lazy var coreDataManager = CoreDataManager.shared
   
   func viewWIllDisappear(with task: TodoTask) {
-    guard !task.title.isEmpty || !task.taskDescription.isEmpty else {
-      coreDataManager.delete(task)
-      return
+    do {
+      guard !task.title.isEmpty || !task.taskDescription.isEmpty else {
+        try coreDataManager.delete(task)
+        return
+      }
+      try coreDataManager.saveContext()
+    } catch {
+      print("Failed to save tasks: \(error)")
+      // TODO: handle the error
     }
-    coreDataManager.saveContext()
   }
 }

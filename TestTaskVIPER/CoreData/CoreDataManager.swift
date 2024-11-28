@@ -20,26 +20,19 @@ class CoreDataManager {
     let container = NSPersistentContainer(name: "TestTaskVIPER")
     container.loadPersistentStores(completionHandler: { (storeDescription, error) in
       if let error = error as NSError? {
-        fatalError("Unresolved error \(error), \(error.userInfo)")
+        print("Unresolved error \(error), \(error.userInfo)")
       }
     })
     return container
   }()
 
-  func saveContext() {
+  func saveContext() throws {
     let context = persistentContainer.viewContext
     DispatchQueue.global(qos: .default).async {
-      if context.hasChanges {
-        do {
-          try context.save()
-        } catch {
-          let nserror = error as NSError
-          print("Unresolved error \(nserror), \(nserror.userInfo)")
-        }
-      }
+      guard context.hasChanges else { return }
+      try? context.save()
     }
   }
-
 
   func obtainData(completion: @escaping ([TodoTask]) -> Void) {
     let context = persistentContainer.viewContext
@@ -63,12 +56,12 @@ class CoreDataManager {
     }
   }
 
-  func delete(_ task: TodoTask) {
+  func delete(_ task: TodoTask) throws {
     let context = persistentContainer.viewContext
     DispatchQueue.global(qos: .default).async { [weak self] in
       guard let self else { return }
       context.delete(task)
-      self.saveContext()
+      try? self.saveContext()
     }
   }
 }

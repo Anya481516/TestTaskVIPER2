@@ -17,11 +17,11 @@ class TodosDomainToModelConverter {
     return todos.map { convert(domainTodo: $0) }
   }
   
-  func convert(domainTodo: Todos.Todo) -> TodoTask {
+  private func convert(domainTodo: Todos.Todo) -> TodoTask {
     let task = TodoTask(context: dataManager.persistentContainer.viewContext)
     task.id = String(domainTodo.id)
     task.title = domainTodo.todo
-    task.taskDescription = domainTodo.todo // nil
+    task.taskDescription = ""
     task.isCompleted = domainTodo.isCompleted
     task.date = Date()
     

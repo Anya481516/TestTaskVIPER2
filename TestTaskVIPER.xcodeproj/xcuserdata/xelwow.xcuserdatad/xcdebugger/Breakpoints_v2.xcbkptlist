@@ -30,8 +30,8 @@
             filePath = "TestTaskVIPER/TodoList/TodoListRouter/TodoListRouter.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "25"
-            endingLineNumber = "25"
+            startingLineNumber = "24"
+            endingLineNumber = "24"
             landmarkName = "navigateToTaskDetail(for:)"
             landmarkType = "7">
          </BreakpointContent>
@@ -62,8 +62,8 @@
             filePath = "TestTaskVIPER/TodoList/TodoListRouter/TodoListRouter.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "42"
-            endingLineNumber = "42"
+            startingLineNumber = "41"
+            endingLineNumber = "41"
             landmarkName = "share(task:)"
             landmarkType = "7">
          </BreakpointContent>
@@ -94,8 +94,8 @@
             filePath = "TestTaskVIPER/TodoList/TodoListInteractor/TodoListInteractor.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "116"
-            endingLineNumber = "116"
+            startingLineNumber = "125"
+            endingLineNumber = "125"
             landmarkName = "shareTaskAt(_:)"
             landmarkType = "7">
          </BreakpointContent>
@@ -183,22 +183,6 @@
       <BreakpointProxy
          BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
          <BreakpointContent
-            uuid = "1690EBAE-0A79-4B84-8E7D-492525FBF23F"
-            shouldBeEnabled = "No"
-            ignoreCount = "0"
-            continueAfterRunningActions = "No"
-            filePath = "TestTaskVIPER/TodoList/TodoListInteractor/TodoListInteractor.swift"
-            startingColumnNumber = "9223372036854775807"
-            endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "104"
-            endingLineNumber = "104"
-            landmarkName = "changeStatusOfTaskAt(_:)"
-            landmarkType = "7">
-         </BreakpointContent>
-      </BreakpointProxy>
-      <BreakpointProxy
-         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
-         <BreakpointContent
             uuid = "E075BEA6-D763-4363-AFD7-E6035E774856"
             shouldBeEnabled = "No"
             ignoreCount = "0"
@@ -238,8 +222,8 @@
             filePath = "TestTaskVIPER/TodoList/TodoListView/MainStackView.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "113"
-            endingLineNumber = "113"
+            startingLineNumber = "107"
+            endingLineNumber = "107"
             landmarkName = "getContentHeight(width:)"
             landmarkType = "7">
          </BreakpointContent>
@@ -273,38 +257,6 @@
             startingLineNumber = "46"
             endingLineNumber = "46"
             landmarkName = "getContentSize()"
-            landmarkType = "7">
-         </BreakpointContent>
-      </BreakpointProxy>
-      <BreakpointProxy
-         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
-         <BreakpointContent
-            uuid = "609D6E77-C428-4136-960F-DB11A79EF9D3"
-            shouldBeEnabled = "No"
-            ignoreCount = "0"
-            continueAfterRunningActions = "No"
-            filePath = "TestTaskVIPER/Task/TaskInteractor/TaskInteractor.swift"
-            startingColumnNumber = "9223372036854775807"
-            endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "28"
-            endingLineNumber = "28"
-            landmarkName = "viewWIllDisappear(with:)"
-            landmarkType = "7">
-         </BreakpointContent>
-      </BreakpointProxy>
-      <BreakpointProxy
-         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
-         <BreakpointContent
-            uuid = "9E157781-7177-42C6-9815-DDBBF3F98410"
-            shouldBeEnabled = "No"
-            ignoreCount = "0"
-            continueAfterRunningActions = "No"
-            filePath = "TestTaskVIPER/TodoList/TodoListInteractor/TodoListInteractor.swift"
-            startingColumnNumber = "9223372036854775807"
-            endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "97"
-            endingLineNumber = "97"
-            landmarkName = "deleteTaskAt(_:)"
             landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>

@@ -18,7 +18,6 @@ protocol TodoListRouterInput: AnyObject {
 class TodoListRouter: TodoListRouterInput {
   
   weak var view: UIViewController!
-  //weak var presenter: TodoListInteractorOutput!
   
   func navigateToTaskDetail(for task: TodoTask) {
     let taskViewController = TaskAssembly.buildTaskModule(task: task, type: .existing)
