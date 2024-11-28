@@ -14,6 +14,10 @@ class CoreDataManager {
 
   private init() {}
 
+  var viewContext: NSManagedObjectContext {
+    return persistentContainer.viewContext
+  }
+
   // MARK: - Core Data stack
 
   private(set) lazy var persistentContainer: NSPersistentContainer = {
@@ -27,7 +31,7 @@ class CoreDataManager {
   }()
 
   func saveContext() throws {
-    let context = persistentContainer.viewContext
+    let context = viewContext
     DispatchQueue.global(qos: .default).async {
       guard context.hasChanges else { return }
       try? context.save()
@@ -35,7 +39,7 @@ class CoreDataManager {
   }
 
   func obtainData(completion: @escaping ([TodoTask]) -> Void) {
-    let context = persistentContainer.viewContext
+    let context = viewContext
     DispatchQueue.global(qos: .default).async {
       let taskFetchRequest = TodoTask.fetchRequest()
       let dateSortDescriptor = NSSortDescriptor(key: "date", ascending: true)
@@ -57,7 +61,7 @@ class CoreDataManager {
   }
 
   func delete(_ task: TodoTask) throws {
-    let context = persistentContainer.viewContext
+    let context = viewContext
     DispatchQueue.global(qos: .default).async { [weak self] in
       guard let self else { return }
       context.delete(task)

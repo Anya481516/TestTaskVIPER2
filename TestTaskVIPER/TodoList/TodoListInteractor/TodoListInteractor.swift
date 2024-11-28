@@ -126,7 +126,7 @@ class TodoListInteractor: TodoListInteractorInput {
   }
   
   func didTapNewTask() {
-    let task = TodoTask(context: coreDataManager.persistentContainer.viewContext)
+    let task = TodoTask(context: coreDataManager.viewContext)
     task.id = UUID().uuidString
     task.title = ""
     task.taskDescription = ""

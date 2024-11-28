@@ -18,7 +18,7 @@ class TodosDomainToModelConverter {
   }
   
   private func convert(domainTodo: Todos.Todo) -> TodoTask {
-    let task = TodoTask(context: dataManager.persistentContainer.viewContext)
+    let task = TodoTask(context: dataManager.viewContext)
     task.id = String(domainTodo.id)
     task.title = domainTodo.todo
     task.taskDescription = ""
