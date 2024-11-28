@@ -66,8 +66,13 @@ class TodoListInteractor: TodoListInteractorInput {
           let response = try await networkManager.obtainTasks()
           tasks = converter.convert(response)
           filteredTasks = tasks
-          try coreDataManager.saveContext()
-          presenter.showTasks()
+          coreDataManager.saveContext() { [weak presenter] error in
+            if let error {
+              presenter?.showError(error)
+            } else {
+              presenter?.showTasks()
+            }
+          }
         }
         catch {
           presenter.showError(error)
@@ -104,12 +109,13 @@ class TodoListInteractor: TodoListInteractorInput {
 
   func changeStatusOfTaskAt(_ row: Int) {
     guard row < tasks.count else { return }
-    do {
-      filteredTasks[row].isCompleted.toggle()
-      try coreDataManager.saveContext()
-      presenter.showTasks()
-    } catch {
-      presenter.showError(error)
+    filteredTasks[row].isCompleted.toggle()
+    coreDataManager.saveContext() { [weak presenter] error in
+      if let error {
+        presenter?.showError(error)
+      } else {
+        presenter?.showTasks()
+      }
     }
   }
 
@@ -126,14 +132,16 @@ class TodoListInteractor: TodoListInteractorInput {
   }
   
   func didTapNewTask() {
-    let task = TodoTask(context: coreDataManager.viewContext)
-    task.id = UUID().uuidString
-    task.title = ""
-    task.taskDescription = ""
-    task.isCompleted = false
-    task.date = Date()
-    
-    presenter.createNewTask(task)
+    coreDataManager.addNewTask { [weak presenter] result in
+      switch result {
+      case .success(let task):
+        presenter?.createNewTask(task)
+        return
+      case .failure(let error):
+        print("Failed adding new task to TodoTask: \(error)")
+        return
+      }
+    }
   }
   
   func didSearchWith(_ searchString: String) {

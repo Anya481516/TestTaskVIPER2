@@ -8,14 +8,14 @@
 import Foundation
 
 protocol TaskPresenterInput: AnyObject {
-  func viewWIllDisappear(with task: TodoTask)
+  func viewWillDisappear(with task: TodoTask)
 }
 
 class TaskPresenter: TaskPresenterInput {
 
   var interactor: TaskInteractorInput?
 
-  func viewWIllDisappear(with task: TodoTask) {
-    interactor?.viewWIllDisappear(with: task)
+  func viewWillDisappear(with task: TodoTask) {
+    interactor?.saveTask(task)
   }
 }

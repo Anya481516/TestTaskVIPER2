@@ -21,7 +21,7 @@ class TaskViewController: UIViewController {
     return textView
   }()
 
-  var presenter: TaskPresenterInput?
+  var presenter: TaskPresenterInput!
   var task: TodoTask
 
   init(
@@ -54,7 +54,7 @@ class TaskViewController: UIViewController {
   override func viewWillDisappear(_ animated: Bool) {
     super.viewWillDisappear(animated)
 
-    presenter?.viewWIllDisappear(with: task)
+    presenter.viewWillDisappear(with: task)
   }
 }
 

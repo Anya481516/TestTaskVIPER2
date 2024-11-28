@@ -30,11 +30,20 @@ class CoreDataManager {
     return container
   }()
 
-  func saveContext() throws {
+  func saveContext(completion:  ((Error?) -> Void)? = nil) {
     let context = viewContext
     DispatchQueue.global(qos: .default).async {
       guard context.hasChanges else { return }
-      try? context.save()
+      do {
+        try context.save()
+        DispatchQueue.main.async {
+          completion?(nil)
+        }
+      } catch {
+        DispatchQueue.main.async {
+          completion?(error)
+        }
+      }
     }
   }
 
@@ -65,7 +74,34 @@ class CoreDataManager {
     DispatchQueue.global(qos: .default).async { [weak self] in
       guard let self else { return }
       context.delete(task)
-      try? self.saveContext()
+      self.saveContext()
+    }
+  }
+
+  func delete(_ task: TodoTask, completion:  ((Error?) -> Void)? = nil) {
+    let context = viewContext
+    DispatchQueue.global(qos: .default).async { [weak self] in
+      guard let self else { return }
+      context.delete(task)
+      self.saveContext(completion: completion)
+    }
+  }
+
+  func addNewTask(completion: @escaping (Result<TodoTask, Error>) -> Void) {
+    let context = viewContext
+    let task = TodoTask(context: context)
+    DispatchQueue.global(qos: .default).async {
+      guard context.hasChanges else { return }
+      do {
+        try context.save()
+        DispatchQueue.main.async {
+          completion(.success(task))
+        }
+      } catch {
+        DispatchQueue.main.async {
+          completion(.failure(error))
+        }
+      }
     }
   }
 }

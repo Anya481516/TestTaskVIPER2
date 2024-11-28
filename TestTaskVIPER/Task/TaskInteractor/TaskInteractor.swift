@@ -8,23 +8,26 @@
 import Foundation
 
 protocol TaskInteractorInput: AnyObject {
-  func viewWIllDisappear(with task: TodoTask)
+  func saveTask(_ task: TodoTask)
 }
 
 class TaskInteractor: TaskInteractorInput {
 
   private lazy var coreDataManager = CoreDataManager.shared
 
-  func viewWIllDisappear(with task: TodoTask) {
+  func saveTask(_ task: TodoTask) {
     do {
       guard !task.title.isEmpty || !task.taskDescription.isEmpty else {
         try coreDataManager.delete(task)
         return
       }
-      try coreDataManager.saveContext()
+      coreDataManager.saveContext() { error in
+        if let error {
+          print("Failed to save tasks: \(error)")
+        }
+      }
     } catch {
-      print("Failed to save tasks: \(error)")
-      // TODO: handle the error
+      print("Failed deleting task: \(error)")
     }
   }
 }

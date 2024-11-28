@@ -18,12 +18,14 @@ class TodosDomainToModelConverter {
   }
   
   private func convert(domainTodo: Todos.Todo) -> TodoTask {
-    let task = TodoTask(context: dataManager.viewContext)
-    task.id = String(domainTodo.id)
-    task.title = domainTodo.todo
-    task.taskDescription = ""
-    task.isCompleted = domainTodo.isCompleted
-    task.date = Date()
+    let task = TodoTask(
+      context: dataManager.viewContext,
+      id: String(domainTodo.id),
+      title: domainTodo.todo,
+      taskDescription: "",
+      isCompleted: domainTodo.isCompleted,
+      date: Date()
+    )
     
     return task
   }
