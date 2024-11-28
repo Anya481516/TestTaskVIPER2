@@ -10,5 +10,4 @@ import UIKit
 enum ColorScheme {
   static let cutsomYellow = UIColor(hex: "FED702")
   static let customGray = UIColor(hex: "4D555E")
-  static let customWhite = UIColor(hex: "F4F4F4")
 }

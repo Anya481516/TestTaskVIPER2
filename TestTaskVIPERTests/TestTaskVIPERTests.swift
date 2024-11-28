@@ -2,7 +2,7 @@
 //  TestTaskVIPERTests.swift
 //  TestTaskVIPERTests
 //
-//  Created by Nikita Komarov on 20.11.2024.
+//  Created by Nikita Komarov on 28.11.2024.
 //
 
 import XCTest

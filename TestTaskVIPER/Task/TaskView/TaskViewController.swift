@@ -7,7 +7,7 @@
 
 import UIKit
 
-class TaskViewController: UIViewController, TaskPresenterOutput {
+class TaskViewController: UIViewController {
 
   private var taskView: TaskView
 

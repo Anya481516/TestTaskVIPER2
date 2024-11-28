@@ -11,15 +11,10 @@ protocol TaskInteractorInput: AnyObject {
   func viewWIllDisappear(with task: TodoTask)
 }
 
-protocol TaskInteractorOutput: AnyObject {
-
-}
-
 class TaskInteractor: TaskInteractorInput {
 
-  weak var presenter: TaskInteractorOutput?
   private lazy var coreDataManager = CoreDataManager.shared
-  
+
   func viewWIllDisappear(with task: TodoTask) {
     do {
       guard !task.title.isEmpty || !task.taskDescription.isEmpty else {

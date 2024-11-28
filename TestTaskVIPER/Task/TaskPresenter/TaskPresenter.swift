@@ -11,13 +11,8 @@ protocol TaskPresenterInput: AnyObject {
   func viewWIllDisappear(with task: TodoTask)
 }
 
-protocol TaskPresenterOutput: AnyObject {
+class TaskPresenter: TaskPresenterInput {
 
-}
-
-class TaskPresenter: TaskPresenterInput, TaskInteractorOutput {
-
-  weak var view: TaskPresenterOutput?
   var interactor: TaskInteractorInput?
 
   func viewWIllDisappear(with task: TodoTask) {
